@@ -27,7 +27,7 @@ plugins:
 | **Dynamic Programming**| Optimization, counting ways, overlapping subproblems | $O(N)$ to $O(N^2)$ |
 | **Heap / Priority Queue**| Top K elements, median, scheduling | $O(N \log K)$ |
 
-## Step 1: Check The Constraints
+## Step 1: Time Constraints
 
 ### Small n ($\le 20$)
 
@@ -53,18 +53,34 @@ plugins:
 - Mathematical formulas
 - $O(1)$ constant time approaches
 
+## Step 1: Space Constraints
+
+### O(1) Constant Space / In-Place {.row-span-2}
+
+[Image of In-place algorithm swapping array elements without using extra memory]
+
+- "in-place"
+- "constant space"
+- "without extra space"
+- "modify"
+- "O(1) space"
+
+### O(N) Linear Space / New Structure
+
+- "new array"
+- "return a new"
+- "clone"
+- "deep copy"
+
 ## Step 2: Analyze Input Format
 
 ### Tree / Binary Tree / BST {.row-span-2}
-
 
 - **DFS:** all paths, recursive exploration, preorder/inorder/postorder
 - **BFS:** level-by-level, shortest path in unweighted tree
 - **Consider:** tree properties, parent-child relationships
 
 ### Graph (nodes + edges) {.row-span-2}
-
-
 
 - **BFS:** shortest path
 - **DFS:** connected components
@@ -179,7 +195,7 @@ plugins:
 
 ### Sliding Window {.row-span-2}
 
-
+[Image of sliding window subarray visualization]
 
 - "longest substring"
 - "shortest substring"

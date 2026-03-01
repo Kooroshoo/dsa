@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const colorPalette = ['#fca5a5', '#fdba74', '#fde047', '#bef264', '#86efac', '#6ee7b7', '#67e8f9', '#7dd3fc', '#a5b4fc', '#d8b4fe', '#f0abfc', '#f9a8d4', '#fda4af'];
         let colorIdx = 0;
 
-        const buildDictWithSolutions = (sectionId, isStep4 = false) => {
+        const buildDictWithSolutions = (sectionId, isStrictKeywordMatch = false) => {
             const dict = {};
             const header = document.getElementById(sectionId);
             if (!header) return dict;
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardHeader.style.borderBottom = '1px solid rgba(0,0,0,0.1)';
                         }
 
-                        if (isStep4) {
+                        if (isStrictKeywordMatch) {
                             keywords = listItems.map(s => s.toLowerCase().replace(/["']/g, ''));
                             solutions = [title];
                         } else {
@@ -139,9 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const step2Dict = buildDictWithSolutions('step-2-analyze-input-format', false);
         const step3Dict = buildDictWithSolutions('step-3-analyze-output-format', false);
         const step4Dict = buildDictWithSolutions('step-4-keyword-pattern-recognition', true);
-        const masterDict = { ...step2Dict, ...step3Dict, ...step4Dict };
+        const spaceDict = buildDictWithSolutions('step-1-space-constraints', true);
+        
+        const masterDict = { ...step2Dict, ...step3Dict, ...step4Dict, ...spaceDict };
 
-        // FIXED: Using Lookbehinds/Lookaheads to prevent partial matches like 'bst' inside 'substring'
         const findMatches = (text, dict) => {
             const matches = [];
             const textLower = text.toLowerCase();
@@ -149,8 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (const kw of data.keywords) {
                     if (!kw) continue;
                     const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    // (?<=\W|^) ensures match starts at word boundary
-                    // (?=\W|$) ensures match ends at word boundary
                     const regex = new RegExp(`(?<=\\W|^)(${escapeRegExp(kw)}(?:es|s)?)(?=\\W|$)`, 'i');
                     if (regex.test(textLower)) {
                         matches.push({ category, solutions: data.solutions, matchedKeyword: kw, color: data.color });
@@ -161,10 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return matches;
         };
 
-        const formatStepMatches = (matches, isStep4 = false) => {
+        const formatStepMatches = (matches, isStrictFormat = false) => {
             if (!matches || matches.length === 0) return '';
-            if (isStep4) {
-                return matches.map(m => `<div><strong>${m.category}</strong> <span class="trigger-word" style="background-color: ${m.color}; color: #000; border-color: rgba(0,0,0,0.1);">(Triggered by: "${m.matchedKeyword}")</span></div>`).join('');
+            if (isStrictFormat) {
+                return matches.map(m => `<div style="margin-top: 0.25rem;"><strong>${m.category}</strong> <span class="trigger-word" style="background-color: ${m.color}; color: #000; border-color: rgba(0,0,0,0.1);">(Triggered by: "${m.matchedKeyword}")</span></div>`).join('');
             }
             return matches.map(m => `
                 <div class="solution-item">
@@ -184,41 +183,49 @@ document.addEventListener('DOMContentLoaded', () => {
             questionBlocks.forEach(block => {
                 const lines = block.split('\n');
                 const qTitle = lines[0].trim();
-                const qDesc = lines.slice(1).join('\n').trim();
-                const fullText = (qTitle + " " + qDesc);
+                const qDescRaw = lines.slice(1).join('\n').trim();
+
+                const codeBlocks = [];
+                let qDescClean = qDescRaw.replace(/```[\s\S]*?```|`[\s\S]*?`/g, (match) => {
+                    const token = `__CODE_BLOCK_${codeBlocks.length}__`;
+                    codeBlocks.push(match);
+                    return token;
+                });
+
+                const fullText = (qTitle + " " + qDescClean);
                 const fullTextLower = fullText.toLowerCase();
+                const fullTextRawLower = (qTitle + " " + qDescRaw).toLowerCase();
 
                 let constraintStr = "Unknown";
                 let step1Solutions = "Assume Medium constraints: $O(N)$ or $O(N \\log N)$ approaches.";
                 
-                if (/-?2\^31/.test(fullTextLower) || /-?10\^9/.test(fullTextLower)) {
+                if (/-?2\^31/.test(fullTextRawLower) || /-?10\^9/.test(fullTextRawLower)) {
                     constraintStr = "Large Values (32-bit Int)"; step1Solutions = "<strong>Math, Bit Manipulation</strong>. Watch out for integer overflow!";
-                } else if (/10\^7|10\^8|10000000/.test(fullTextLower)) {
+                } else if (/10\^7|10\^8|10000000/.test(fullTextRawLower)) {
                     constraintStr = "Large ($\\ge 10^7$)"; step1Solutions = "<strong>Binary Search, Math, $O(1)$ formulas</strong> only.";
-                } else if (/10\^4|10\^5|10\^6|10000(?!\d)|10\*\*4|10\*\*5/.test(fullTextLower)) {
+                } else if (/10\^4|10\^5|10\^6|10000(?!\d)|10\*\*4|10\*\*5/.test(fullTextRawLower)) {
                     constraintStr = "Medium ($10^4$ to $10^6$)"; step1Solutions = "<strong>Two Pointers, Greedy, DP, Sliding Window, Heaps</strong>. No brute force.";
-                } else if (/(?:<=|<|==|=)\s*(1000|2000|3000|3999|[1-9][0-9]{2})(?!\d|\^|\*)/.test(fullTextLower)) {
+                } else if (/(?:<=|<|==|=)\s*(1000|2000|3000|3999|[1-9][0-9]{2})(?!\d|\^|\*)/.test(fullTextRawLower)) {
                     constraintStr = "Medium-Small ($n \\le 10^3$)"; step1Solutions = "<strong>$O(N^2)$ approaches like DP or Nested Loops</strong> might pass.";
-                } else if (/(?:<=|<|==|=)\s*(20|15|10|50|100|[1-9][0-9]?)(?!\d|\^|\*)/.test(fullTextLower)) {
+                } else if (/(?:<=|<|==|=)\s*(20|15|10|50|100|[1-9][0-9]?)(?!\d|\^|\*)/.test(fullTextRawLower)) {
                     constraintStr = "Small ($n \\le 100$)"; step1Solutions = "<strong>Brute Force, Backtracking, Recursion</strong> are highly viable.";
                 }
 
                 const s2 = findMatches(fullText, step2Dict);
                 const s3 = findMatches(fullText, step3Dict);
                 const s4 = findMatches(fullText, step4Dict);
+                const sSpace = findMatches(fullText, spaceDict);
 
-                // HIGHLIGHTING THE TEXT dynamically across ALL matched steps
-                let highlightedDesc = qDesc;
-                const allMatches = [...s2, ...s3, ...s4];
+                // HIGHLIGHTING THE TEXT dynamically
+                let highlightedDesc = qDescClean;
+                const allMatches = [...s2, ...s3, ...s4, ...sSpace];
                 
-                // Sort by length so longer phrases get highlighted first
                 allMatches.sort((a, b) => b.matchedKeyword.length - a.matchedKeyword.length);
                 const placeholders = [];
 
                 allMatches.forEach((m) => {
                     if (m.matchedKeyword && m.color) {
                         const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                        // FIXED: Same regex logic as findMatches to ensure absolute alignment
                         const regex = new RegExp(`(?<=\\W|^)(${escapeRegExp(m.matchedKeyword)}(?:es|s)?)(?=\\W|$)`, 'gi');
                         
                         highlightedDesc = highlightedDesc.replace(regex, (match) => {
@@ -229,20 +236,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // Swap placeholders back to real HTML
                 placeholders.forEach((html, idx) => {
                     highlightedDesc = highlightedDesc.replace(`__MARK_TOKEN_${idx}__`, html);
                 });
 
-                // BUILD TAGS: Only use Step 4 (Algorithms) for the final prediction
+                codeBlocks.forEach((block, idx) => {
+                    highlightedDesc = highlightedDesc.replace(`__CODE_BLOCK_${idx}__`, block);
+                });
+
+                // BUILD TAGS
                 let finalAlgos = [];
                 if (s4.length > 0) {
                     finalAlgos.push(...s4.map(m => m.category));
                 }
-                
                 finalAlgos = [...new Set(finalAlgos)]; 
                 
-                // Fallback if no Step 4 keyword was triggered
                 if (finalAlgos.length === 0) {
                     if (s2.length > 0) {
                         finalAlgos = ['Structure Traversal (See Step 2)'];
@@ -263,6 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const step2Html = s2.length ? formatStepMatches(s2) : step2FallbackHtml;
                 const step3Html = s3.length ? formatStepMatches(s3) : step3FallbackHtml;
                 const step4Html = s4.length ? formatStepMatches(s4, true) : '<span class="step-none">No obvious trigger words found in the text.</span>';
+                
+                // Formatted Space String
+                const spaceHtml = sSpace.length ? formatStepMatches(sSpace, true) : '<span class="step-none" style="margin-top:0.25rem; display:inline-block;">No strict space constraints detected (Assume O(N) is fine).</span>';
 
                 qDiv.innerHTML = `
                     <h3>${qTitle}</h3>
@@ -270,10 +281,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     <div class="analysis-box">
                         <h4>🤖 4-Step Analysis</h4>
+                        
                         <div class="step-row step-column">
-                            <span class="step-label">Step 1: Constraints [ ${constraintStr} ]</span>
-                            <div class="step-val text-val">${step1Solutions}</div>
+                            <span class="step-label">Step 1: Constraints & Complexity</span>
+                            <div class="step-val text-val" style="width: 100%;">
+                                <div style="margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px dashed #cbd5e1;">
+                                    <strong style="color: var(--theme-color);">⏱️ Time [ ${constraintStr} ]:</strong> ${step1Solutions}
+                                </div>
+                                <div>
+                                    <strong style="color: var(--theme-color);">💾 Space:</strong> ${spaceHtml}
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="step-row step-column">
                             <span class="step-label">Step 2: Input Formatting</span>
                             <div class="step-val text-val">${step2Html}</div>
