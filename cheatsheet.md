@@ -1,5 +1,5 @@
 ---
-title: Leetcode Pattern Recognition
+title: DSA
 date: 2026-03-01 13:19:20
 background: bg-[#FFA116]
 tags:
@@ -9,7 +9,7 @@ tags:
 categories:
   - Interview Prep
 intro: |
-  Print this out, keep it by you, but not during your interview 😉
+  Leetcode Pattern Recognition
 plugins:
   - copyCode
 ---
