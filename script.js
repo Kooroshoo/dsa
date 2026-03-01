@@ -11,11 +11,30 @@ document.addEventListener('DOMContentLoaded', () => {
             : { clean: str, classes: [], matched: null };
     };
 
+    // MODAL ELEMENTS
+    const modalOverlay = document.getElementById('template-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const closeModalBtn = document.getElementById('close-modal');
+
     Promise.all([
         fetch('cheatsheet.md').then(res => res.text()),
-        fetch('questions.md').then(res => res.ok ? res.text() : null)
-    ]).then(([cheatText, questionsText]) => {
+        fetch('questions.md').then(res => res.ok ? res.text() : null),
+        fetch('templates.md').then(res => res.ok ? res.text() : null)
+    ]).then(([cheatText, questionsText, templatesText]) => {
         
+        // --- 0. PARSE TEMPLATES.MD ---
+        const templateDict = {};
+        if (templatesText) {
+            const tempBlocks = templatesText.split(/^##\s+/m).filter(b => b.trim() !== '');
+            tempBlocks.forEach(block => {
+                const lines = block.split('\n');
+                const title = lines[0].trim();
+                const content = lines.slice(1).join('\n').trim();
+                templateDict[title] = marked.parse(content);
+            });
+        }
+
         // --- 1. RENDER CHEAT SHEET ---
         const match = cheatText.match(/^---[\r\n]+([\s\S]*?)[\r\n]+---/);
         let mdContent = cheatText;
@@ -62,6 +81,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (node.tagName === 'TABLE') {
                     const wrap = Object.assign(document.createElement('div'), { className: 'table-wrapper' });
+                    
+                    // --- NEW: MAKE FIRST COLUMN OF TABLE CLICKABLE ---
+                    const cells = node.querySelectorAll('td:first-child');
+                    cells.forEach(cell => {
+                        const targetEl = cell.querySelector('strong') || cell;
+                        let algoName = targetEl.textContent.trim();
+                        // Align table label with templates.md label
+                        if (algoName.includes('Heap')) algoName = 'Heap & Priority Queue';
+                        
+                        targetEl.classList.add('table-algo-link');
+                        targetEl.setAttribute('data-algo', algoName);
+                    });
+
                     wrap.appendChild(node);
                     cardBody.appendChild(wrap);
                 } 
@@ -249,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let tagsHtml = finalAlgos.map(algo => {
                 const catData = masterDict[algo];
                 const bg = catData && catData.color ? catData.color : '#e2e8f0';
-                return `<span class="algo-tag" style="background-color: ${bg}; color: #000;">${algo}</span>`;
+                return `<span class="algo-tag" data-algo="${algo}" style="background-color: ${bg}; color: #000;">${algo}</span>`;
             }).join('');
 
             const step2Html = s2.length ? formatStepMatches(s2) : step2FallbackHtml;
@@ -293,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <summary>Reveal Predicted Approach</summary>
                         <div class="predicted-tags-container">
                             ${tagsHtml}
+                            <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 0.8rem; color: #64748b;">(Click a tag to view template)</div>
                         </div>
                     </details>
                 </div>
@@ -300,65 +333,66 @@ document.addEventListener('DOMContentLoaded', () => {
             return qDiv;
         };
 
-        // --- 4. RENDER CUSTOM USER INPUT ---
+        // --- 4. MODAL CLICK LOGIC (UPDATED TO INCLUDE TABLE LINKS) ---
+        document.addEventListener('click', (e) => {
+            // Check if user clicked a prediction tag OR a table link
+            if (e.target.classList.contains('algo-tag') || e.target.classList.contains('table-algo-link')) {
+                const algoName = e.target.getAttribute('data-algo');
+                modalTitle.innerText = algoName;
+                
+                if (templateDict[algoName]) {
+                    modalBody.innerHTML = templateDict[algoName];
+                } else {
+                    modalBody.innerHTML = `<p><em>No template found for "${algoName}". Add it to templates.md!</em></p>`;
+                }
+
+                modalOverlay.classList.remove('hidden');
+                if (typeof Prism !== 'undefined') Prism.highlightAllUnder(modalBody);
+                if (typeof renderMathInElement !== 'undefined') {
+                    renderMathInElement(modalBody, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false });
+                }
+            }
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.classList.add('hidden');
+        });
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) modalOverlay.classList.add('hidden');
+        });
+
+        // --- 5. RENDER CUSTOM USER INPUT ---
         document.getElementById('analyze-btn').addEventListener('click', () => {
             const titleInput = document.getElementById('custom-title').value.trim();
             const descInput = document.getElementById('custom-desc').value.trim();
-            
-            if (!descInput) {
-                alert("Please paste a problem description to analyze!");
-                return;
-            }
+            if (!descInput) { alert("Please paste a problem description to analyze!"); return; }
 
-            customResultContainer.innerHTML = ''; // Clear previous test
-            const newCard = createQuestionCard(titleInput, descInput);
-            customResultContainer.appendChild(newCard);
+            customResultContainer.innerHTML = ''; 
+            customResultContainer.appendChild(createQuestionCard(titleInput, descInput));
 
-            // Re-render math inside the newly generated box
             if (typeof renderMathInElement !== 'undefined') {
-                renderMathInElement(customResultContainer, {
-                    delimiters: [
-                        {left: '$$', right: '$$', display: true},
-                        {left: '$', right: '$', display: false}
-                    ],
-                    throwOnError: false
-                });
+                renderMathInElement(customResultContainer, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false });
             }
         });
 
-        // ADD THIS NEW CLEAR BUTTON LOGIC:
         document.getElementById('clear-btn').addEventListener('click', () => {
             document.getElementById('custom-title').value = '';
             document.getElementById('custom-desc').value = '';
-            customResultContainer.innerHTML = ''; // Instantly remove the result card
+            customResultContainer.innerHTML = '';
         });
 
-        // --- 5. RENDER PRE-LOADED QUESTIONS.MD ---
+        // --- 6. RENDER PRE-LOADED QUESTIONS ---
         if (questionsText) {
             questionsContainer.innerHTML = '';
             const questionBlocks = questionsText.split(/^###\s+/m).filter(block => block.trim() !== '');
-
             questionBlocks.forEach(block => {
                 const lines = block.split('\n');
-                const qTitle = lines[0].trim();
-                const qDescRaw = lines.slice(1).join('\n').trim();
-
-                const qDiv = createQuestionCard(qTitle, qDescRaw);
-                questionsContainer.appendChild(qDiv);
+                questionsContainer.appendChild(createQuestionCard(lines[0].trim(), lines.slice(1).join('\n').trim()));
             });
-        } else {
-            questionsContainer.innerHTML = "<p>No questions.md file found to analyze.</p>";
         }
 
-        // --- 6. RENDER ALL MATH ON LOAD ---
         if (typeof renderMathInElement !== 'undefined') {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$', right: '$', display: false}
-                ],
-                throwOnError: false
-            });
+            renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false });
         }
 
     }).catch(console.error);
