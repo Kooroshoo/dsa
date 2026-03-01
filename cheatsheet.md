@@ -27,26 +27,9 @@ plugins:
 | **Dynamic Programming**| Optimization, counting ways, overlapping subproblems | $O(N)$ to $O(N^2)$ |
 | **Heap / Priority Queue**| Top K elements, median, scheduling | $O(N \log K)$ |
 
-### How To Choose? (Decision Matrix) {.col-span-2 .row-span-2}
-
-
-
-- **Is the data sorted?** $\rightarrow$ Binary Search, Two Pointers
-- **Is it a Tree or Graph?** $\rightarrow$ DFS, BFS, Union Find, Topological Sort
-- **Are you finding all permutations/subsets?** $\rightarrow$ Backtracking (DFS)
-- **Are you optimizing (min/max) or counting ways?** $\rightarrow$ Dynamic Programming, Greedy
-- **Is it a contiguous sequence (subarray/substring)?** $\rightarrow$ Sliding Window
-- **Do you need the top $K$ elements?** $\rightarrow$ Heap / Priority Queue
-- **Are you modifying in-place?** $\rightarrow$ Two Pointers (Fast/Slow or Left/Right)
-
 ## Step 1: Check The Constraints
 
 ### Small n ($\le 20$)
-
-
-
-[Image of Big O time complexity chart]
-
 
 - Brute force approaches are viable
 - Backtracking and recursion
@@ -73,10 +56,6 @@ plugins:
 ## Step 2: Analyze Input Format
 
 ### Tree / Binary Tree / BST {.row-span-2}
-
-
-
-[Image of tree traversal algorithms]
 
 
 - **DFS:** all paths, recursive exploration, preorder/inorder/postorder
