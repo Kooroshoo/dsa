@@ -55,11 +55,7 @@ Note: "aba" is also a valid answer
 ```
 
 ### ZigZag Conversion
-The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: 
-P   A   H   N
-A P L S I I G
-Y   I   R
-And then read line by line: "PAHNAPLSIIGYIR". Write a code that will take a string and make this conversion given a number of rows.
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: P A H N A P L S I I G Y I R And then read line by line: "PAHNAPLSIIGYIR". Write a code that will take a string and make this conversion given a number of rows.
 Constraints: `1 <= s.length <= 1000`
 
 **Example 1:**
@@ -154,4 +150,129 @@ Constraints: `1 <= strs.length <= 200`
 ```text
 Input: ["flower", "flow", "flight"]
 Output: "fl"
+```
+
+### 3Sum
+Given an array "nums" of n integers, are there elements a, b, c in nums such that a+b+c=0? Find all unique triplets in the array which gives the sum of zero. The solution set must not contain duplicate triplets.
+Constraints: `0 <= nums.length <= 3000`
+
+**Example:**
+```text
+Given array nums = [-1, 0, 1, 2, -1, -4]. 
+A solution set is: 
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+```
+
+### 3Sum Closest
+Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest to target. Return the sum of the three integers. You may assume that each input would have exactly one solution. 
+Constraints: `3 <= nums.length <= 1000`
+
+**Example:**
+```text
+Given array nums=[-1, 2, 1, -4], and target=1.
+The sum that is closest to the target is 2. (-1+2+1=2)
+```
+
+### Letter Combinations of a Phone Number 
+Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. A mapping of digit to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters. 
+Constraints: `0 <= digits.length <= 4`
+
+**Example:**
+```text
+Input: "23" 
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]. 
+```
+
+### 4Sum
+Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target. The solution set must not contain duplicate quadruplets.
+Constraints: `1 <= nums.length <= 200`
+
+**Example:**
+```text
+Given array nums = [1, 0, -1, 0, -2, 2], and target = 0
+A solution set is: 
+[
+  [-1,  0, 0, 1],
+  [-2, -1, 1, 2],
+  [-2,  0, 0, 2]
+]
+```
+
+### Remove Nth Node From End of List 
+Given a linked list, remove the n-th node from the end of the list and return its head.
+Constraints: `1 <= sz <= 30`
+
+**Example:**
+```text
+Given linked list: 1 -> 2 -> 3 -> 4 -> 5, and n=2 
+After removing the second node from the end, the linked list becomes 1 -> 2 -> 3 -> 5
+```
+
+### Valid Parentheses
+Given a string containing just the characters '(', ')', '{', '}', '[', ']', determine if the input string is valid. An input string is valid if: Open brackets must be closed by the same type of brackets, and open brackets must be closed in the correct order. Note that an empty string is also considered valid.
+Constraints: `1 <= s.length <= 10^4`
+
+**Example 1:**
+```text
+Input: "()[]{}"
+Output: true 
+```
+
+### Merge Two Sorted Lists
+Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists. 
+Constraints: `0 <= node count <= 50`
+
+**Example:**
+```text
+Input: 1->2->4, 1->3->4
+Output: 1->1->2->3->4->4
+```
+
+### Generate Parentheses
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+Constraints: `1 <= n <= 8`
+
+**Example:**
+```text
+Given n=3, a solution set is: 
+[
+  "((()))",
+  "(()())",
+  "(())()",
+  "()(())",
+  "()()()"
+]
+```
+
+### Merge k Sorted Lists 
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+Constraints: `0 <= k <= 10^4`
+
+**Example:**
+```text
+Input: 
+[
+	1 -> 4 -> 5,
+	1 -> 3 -> 4,
+	2 -> 6
+]
+Output: 1 -> 1 -> 2 -> 3 -> 4 -> 4 -> 5 -> 6
+```
+
+### LRU Cache 
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put. get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1. put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item. Could both of these operations be done in O(1) time complexity?
+Constraints: `1 <= capacity <= 3000`
+
+**Example:**
+```text
+LRUCache cache = new LRUCache(2 /* capacity */);
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1 
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
 ```
