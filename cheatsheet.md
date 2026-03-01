@@ -53,11 +53,9 @@ plugins:
 - Mathematical formulas
 - $O(1)$ constant time approaches
 
-## Step 1: Space Constraints
+## Space Constraints
 
 ### O(1) Constant Space / In-Place {.row-span-2}
-
-[Image of In-place algorithm swapping array elements without using extra memory]
 
 - "in-place"
 - "constant space"
@@ -113,7 +111,7 @@ plugins:
 - Dummy node techniques
 - Cycle detection
 
-## Step 3: Analyze Output Format
+## Analyze Output Format
 
 ### List of Lists
 
@@ -141,7 +139,7 @@ plugins:
 - **Topological Sort** for dependencies
 - **Heap** for maintaining order
 
-## Step 4: Keyword Pattern Recognition
+## Step 3: Keyword Pattern Recognition
 
 ### Dynamic Programming {.row-span-2}
 
@@ -194,8 +192,6 @@ plugins:
 - "common prefix"
 
 ### Sliding Window {.row-span-2}
-
-[Image of sliding window subarray visualization]
 
 - "longest substring"
 - "shortest substring"
