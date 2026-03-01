@@ -209,6 +209,7 @@ plugins:
 - "Search in sorted"
 - "Minimize maximum"
 - "First/last occurrence"
+- "rotated"
 
 ### Math & Geometry
 

@@ -425,3 +425,107 @@ mark {
     border: 1px solid rgba(0,0,0,0.1);
     text-shadow: none;
 }
+
+
+/* --- Custom Paste Section --- */
+.custom-input-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+.custom-input-section input,
+.custom-input-section textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: #f8fafc;
+}
+.custom-input-section input:focus,
+.custom-input-section textarea:focus {
+    outline: none;
+    border-color: var(--theme-color);
+    background: #ffffff;
+}
+.custom-input-section textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+.custom-input-section button {
+    background-color: var(--theme-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.custom-input-section button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* --- Custom Input Buttons --- */
+.button-group {
+    display: flex;
+    gap: 1rem;
+}
+.secondary-btn {
+    background-color: #e2e8f0 !important;
+    color: #475569 !important;
+}
+.secondary-btn:hover {
+    background-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+/* --- Expandable Pre-Loaded Questions Section --- */
+.preloaded-details {
+    background: transparent;
+    border: none;
+    margin-top: 1rem;
+}
+.preloaded-details > summary {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--theme-color);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    color: var(--theme-color);
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 300;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    list-style: none; /* Hides default arrow */
+    position: relative;
+}
+.preloaded-details > summary::-webkit-details-marker {
+    display: none; /* Hides arrow in Safari/Chrome */
+}
+.preloaded-details > summary::after {
+    content: "▼";
+    position: absolute;
+    right: 1.5rem;
+    font-size: 1.2rem;
+    color: #94a3b8;
+    transition: transform 0.3s ease;
+}
+.preloaded-details[open] > summary::after {
+    transform: rotate(180deg);
+}
+.preloaded-details > .questions-list {
+    margin-top: 2rem;
+}
