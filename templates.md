@@ -149,13 +149,21 @@ def dfs(node):
 
 ## Structure Traversal (See Step 2)
 
-**Note:** No complex algorithmic trick was detected. You likely just need to loop over the data structure identified in Step 2 (e.g., standard `for` loop over an array, or a `while` loop over a linked list).
+**Note:** No complex algorithmic trick was detected. You likely just need to loop over the data structure identified in Step 2.
 
 ```python
-# Standard Linear Scan
-for i in range(len(nums)):
-    # process nums[i]
-    pass
+# 1. Standard Array Traversal
+def traverseArray(nums):
+    for i in range(len(nums)):
+        # process nums[i]
+        pass
+
+# 2. Standard Linked List Traversal
+def traverseLinkedList(head):
+    curr = head
+    while curr is not None:
+        # process curr.val
+        curr = curr.next
 ```
 
 ## DFS / BFS
@@ -206,4 +214,116 @@ def topKElements(nums, k):
             
     # The root of the min_heap is the Kth largest element
     return min_heap[0] 
+```
+
+## Math & Geometry
+
+**Best for:** Digit manipulation, string-to-number conversions, and mathematical mappings.
+
+```python
+# 1. Digit Extraction (Reverse Integer, Palindrome Number)
+def processDigits(n):
+    res = 0
+    n = abs(n)
+    while n > 0:
+        digit = n % 10            # Pop last digit
+        res = (res * 10) + digit  # Push to new number
+        n = n // 10               # Remove last digit
+    return res
+
+
+# 2. String to Number (atoi)
+def stringToNumber(s):
+    res = 0
+    for char in s:
+        if char.isdigit():
+            digit = int(char)
+            res = (res * 10) + digit # Shift left and add
+    return res
+
+
+# 3. Value Mapping (Integer to Roman)
+def intToRoman(num):
+    # Always order from largest to smallest
+    values = [(1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'), 
+              (100, 'C'), (90, 'XC'), (50, 'L'), (40, 'XL'), 
+              (10, 'X'), (9, 'IX'), (5, 'V'), (4, 'IV'), (1, 'I')]
+    
+    res = []
+    for val, symbol in values:
+        if num == 0: break
+        count = num // val
+        res.append(symbol * count)
+        num = num % val
+        
+    return "".join(res)
+```
+
+## Trie (Prefix Tree)
+
+**Best for:** String matching, prefix checking, and word dictionaries.
+
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word: str) -> None:
+        curr = self.root
+        for char in word:
+            if char not in curr.children:
+                curr.children[char] = TrieNode()
+            curr = curr.children[char]
+        curr.is_end = True
+
+    def search(self, word: str) -> bool:
+        curr = self.root
+        for char in word:
+            if char not in curr.children:
+                return False
+            curr = curr.children[char]
+        return curr.is_end
+```
+
+## Ad-Hoc / Brute Force
+
+**Best for:** Small constraints ($N \le 100$) where no obvious optimal pattern exists. Try all possibilities.
+
+```python
+def bruteForce(nums):
+    n = len(nums)
+    best_ans = 0
+    
+    # Check every possible pair or combination
+    for i in range(n):
+        for j in range(i + 1, n):
+            # Evaluate nums[i] and nums[j]
+            pass
+            
+    return best_ans
+```
+
+## Stack
+
+**Best for:** Valid parentheses, undo operations, parsing nested structures.
+
+```python
+def stackTemplate(s):
+    stack = []
+    
+    for char in s:
+        if char in "({[":       # Open condition
+            stack.append(char)
+        else:                   # Close condition
+            if not stack: 
+                return False
+            top = stack.pop()
+            # Check if 'top' matches 'char' here
+            
+    return len(stack) == 0      # Valid if empty at the end
 ```
