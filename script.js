@@ -95,24 +95,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildDictionaries() {
-        // Preserving the vibrant pastel palette for the tags
-        const palette = ['#fca5a5', '#fdba74', '#fde047', '#bef264', '#86efac', '#6ee7b7', '#67e8f9', '#7dd3fc', '#a5b4fc', '#d8b4fe', '#f0abfc', '#f9a8d4', '#fda4af'];
-        let cIdx = 0;
+        // One flat light tint per section instead of a 13-color rainbow, so color
+        // communicates *category* (structure) rather than being assigned at random.
+        const sectionPalettes = {
+            'step-2-analyze-input-format': ['#DBEAFE'],              // light blue
+            'analyze-output-format': ['#D1FAE5'],                    // light green
+            'step-3-keyword-pattern-recognition': ['#EDE9FE'],       // light violet
+            'space-constraints': ['#FED7AA']                        // light orange (matches theme)
+        };
+        const sectionCounters = {};
 
         const extract = (sectionId, isStrict) => {
             const dict = {}, header = document.getElementById(sectionId);
             if (!header) return dict;
+            const palette = sectionPalettes[sectionId] || ['#E2E8F0'];
+            sectionCounters[sectionId] = 0;
             let curr = header.nextElementSibling;
             while (curr && curr.tagName !== 'H2') {
                 if (curr.classList.contains('grid-container')) {
                     curr.querySelectorAll('.cheat-card').forEach(card => {
                         const title = card.querySelector('.cheat-card-header').textContent.trim();
                         const items = Array.from(card.querySelectorAll('li')).map(el => el.textContent.trim());
-                        const color = palette[cIdx++ % palette.length];
+                        const color = palette[sectionCounters[sectionId]++ % palette.length];
                         
                         const cardHeader = card.querySelector('.cheat-card-header');
                         cardHeader.style.backgroundColor = color; 
-                        cardHeader.style.color = '#000';
+                        cardHeader.style.color = '#1e293b';
                         cardHeader.style.borderBottom = '1px solid rgba(0,0,0,0.1)';
 
                         let kws = isStrict ? items.map(s => s.toLowerCase().replace(/["']/g, '')) 
@@ -230,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 <details class="reveal-verdict"><summary>Reveal Predicted Approach</summary>
                     <div class="predicted-tags-container">
-                        ${algos.map(a => `<span class="algo-tag" data-algo="${a}" style="background:${dictionaries.master[a]?.color || '#e2e8f0'}; color: #000;">${a}</span>`).join('')}
+                        ${algos.map(a => `<span class="algo-tag" data-algo="${a}" style="background:${dictionaries.master[a]?.color || '#e2e8f0'}; color: #1e293b;">${a}</span>`).join('')}
                         <div style="width:100%; text-align:center; font-size:0.8rem; color:#64748b; margin-top:10px;">(Click a tag to view template)</div>
                     </div>
                 </details>

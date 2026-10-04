@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-    /* LeetCode Orange Theme */
-    --theme-color: #FFA116;      
-    --theme-hover: #e68a00;
+    /* Medium Orange Theme (warm, visible, but not harsh) */
+    --theme-color: #FDBA74;      
+    --theme-hover: #FB923C;
     
     --bg-body: #f8fafc;          
     --card-bg: #ffffff;
@@ -30,7 +30,7 @@ body {
 .header-section {
     padding: 4rem 1rem;
     text-align: center;
-    color: white;
+    color: #1e293b;
     background-color: var(--theme-color);
     box-shadow: var(--shadow-md);
 }
@@ -70,8 +70,8 @@ h2.section-title {
     transform: translateY(-2px);
 }
 .cheat-card-header {
-    background-color: var(--theme-color);
-    color: #000;
+    background-color: #FED7AA;
+    color: #1e293b;
     padding: 0.75rem 1.25rem;
     font-size: 0.95rem;
     font-weight: 600;
@@ -118,14 +118,14 @@ th { font-weight: 600; color: #0f172a; background: #f8fafc; }
     box-sizing: border-box;
 }
 .custom-input-section input:focus, .custom-input-section textarea:focus {
-    outline: none; border-color: var(--theme-color); background: #fff; box-shadow: 0 0 0 3px rgba(255, 161, 22, 0.15);
+    outline: none; border-color: var(--theme-color); background: #fff; box-shadow: 0 0 0 3px rgba(253, 186, 116, 0.3);
 }
 .custom-input-section textarea { min-height: 120px; resize: vertical; }
 
 .button-group { display: flex; gap: 1rem; }
 button {
     background: var(--theme-color);
-    color: white;
+    color: #1e293b;
     border: none;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
@@ -168,7 +168,7 @@ mark { background: #fef08a; padding: 0.1em 0.4em; border-radius: 4px; font-weigh
 .trigger-word { font-size: 0.85em; padding: 0.2em 0.6em; border-radius: 999px; margin-left: 0.5rem; font-weight: 500; color: #000; border: 1px solid rgba(0,0,0,0.1); }
 
 .reveal-verdict { margin-top: 2rem; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
-.reveal-verdict summary { background: var(--theme-color); color: #fff; font-weight: 600; padding: 1rem; cursor: pointer; text-align: center; list-style: none; }
+.reveal-verdict summary { background: var(--theme-color); color: #1e293b; font-weight: 600; padding: 1rem; cursor: pointer; text-align: center; list-style: none; }
 .reveal-verdict summary::-webkit-details-marker { display: none; }
 .predicted-tags-container { padding: 1.5rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; background: #f8fafc; }
 .algo-tag { padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); transition: all 0.2s; box-shadow: var(--shadow-sm); }
