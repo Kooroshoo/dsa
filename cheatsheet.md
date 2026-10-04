@@ -14,18 +14,18 @@ plugins:
   - copyCode
 ---
 
-## Core Strategy: Top Algorithms & Selection
+## Core Strategy
 
-### The "Big 6" Algorithms {.col-span-2}
+### Algorithms {.col-span-2}
 
 | Algorithm | Best For | Typical Complexity |
 | :--- | :--- | :--- |
-| **DFS / BFS** | Trees, Graphs, Matrices, Combinations | $O(V + E)$ or $O(N)$ |
-| **Sliding Window** | Contiguous subarrays/substrings | $O(N)$ |
-| **Two Pointers** | Sorted arrays, palindromes, linked lists | $O(N)$ |
-| **Binary Search** | Sorted data, finding a target, monotonic functions | $O(\log n)$ |
-| **Dynamic Programming**| Optimization, counting ways, overlapping subproblems | $O(N)$ to $O(N^2)$ |
-| **Heap / Priority Queue**| Top K elements, median, scheduling | $O(N \log K)$ |
+| **HashMap & HashSet** | Counting, duplicates, fast O(1) lookups | $O(N)$ |
+| **Two Pointers** | Sorted arrays, palindromes, pair sums | $O(N)$ |
+| **Binary Search** | Sorted data, finding a target/boundary | $O(\log N)$ |
+| **Sliding Window** | Contiguous subarray/substring problems | $O(N)$ |
+| **Linked Lists** | Node traversal, cycles, reversal | $O(N)$ |
+| **Trees + DFS/BFS** | Hierarchical data, paths, level order | $O(N)$ |
 
 ## Step 1: Time Constraints
 
@@ -141,99 +141,50 @@ plugins:
 
 ## Step 3: Keyword Pattern Recognition
 
-### Dynamic Programming {.row-span-2}
+### HashMap & HashSet
 
-- "Number of ways"
-- "Maximum/minimum"
-- "sum/profit/cost"
-- "longest palindromic"
-- "Optimal" or "best"
+- "frequency"
+- "duplicate"
+- "anagram"
+- "complement"
+- "indices"
 
 ### Two Pointers
 
-- "Palindrome"
-- "Sorted array"
-- "target"
-- "Remove duplicates"
+- "palindrome"
+- "sorted array"
+- "remove duplicates"
 - "most water"
+- "pair sum"
 
-### Heap & Priority Queue
+### Binary Search
 
-- "K largest" or "K smallest"
-- "Top K elements"
-- "Median"
-- "Priority"
+- "sorted"
+- "kth element"
+- "rotated"
+- "first and last position"
+- "minimize the maximum"
 
-### Stack
-
-- "Parentheses" or "brackets"
-- "Valid expression"
-- "Nested structure"
-- "Undo operations"
-
-### Monotonic Stack
-
-- "Next greater element"
-- "Next smaller element"
-
-### HashMap / HashSet
-
-- "Count frequency"
-- "Find duplicates"
-- "Anagram"
-- "indices"
-- "complements"
-
-### Trie (Prefix Tree)
-
-- "Word search"
-- "Word prefixes"
-- "Dictionary matches"
-- "common prefix"
-
-### Sliding Window {.row-span-2}
+### Sliding Window
 
 - "longest substring"
 - "shortest substring"
-- "Subarray"
-- "Maximum/minimum window"
-- "Contains all"
+- "subarray"
+- "window"
+- "contains all"
 
-### Binary Search {.row-span-2}
+### Linked Lists
 
-- "Kth element"
-- "Search in sorted"
-- "Minimize maximum"
-- "First/last occurrence"
-- "rotated"
+- "linked list"
+- "listnode"
+- "reverse linked list"
+- "cycle in"
+- "merge two sorted lists"
 
-### Math & Geometry
+### Trees + DFS/BFS {.row-span-2}
 
-- "Greatest/Least Common Denominator"
-- "Prime numbers"
-- "Angle calculations"
-- "overflow"
-- "roman numeral"
-- "atoi"
-
-### Game Theory
-
-- "Optimal strategy"
-- "Win/lose scenarios"
-- "Minimax"
-
-### Bit Manipulation
-
-- "XOR" operations
-- "Single number" problems
-- "Power of 2"
-
-### Union Find
-
-- "Connected components"
-- "Number of groups"
-
-### Greedy
-
-- "Minimum operations"
-- "Local optima to global optima"
+- "binary tree"
+- "BST"
+- "level order"
+- "root to leaf"
+- "lowest common ancestor"

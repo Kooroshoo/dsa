@@ -3,22 +3,25 @@
 **Best for:** Sorted arrays, searching for pairs, palindromes, or comparing ends.
 
 ```python
-# Standard opposite-ends Two Pointers
-def twoPointers(nums, target):
-    left = 0
-    right = len(nums) - 1
-    
-    while left < right:
-        curr_sum = nums[left] + nums[right]
-        
-        if curr_sum == target:
-            return [left, right]
-        elif curr_sum < target:
-            left += 1  # Need a bigger number
-        else:
-            right -= 1 # Need a smaller number
-            
-    return -1
+# Variant 1: opposite ends - move toward each other
+left, right = 0, len(arr) - 1
+
+while left < right:
+    if condition(arr[left], arr[right]):
+        left += 1   # move left pointer inward
+    else:
+        right -= 1  # move right pointer inward
+```
+
+```python
+# Variant 2: fast & slow - same start, different speed (cycle detection, middle of list)
+slow, fast = head, head
+
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next
+    if slow == fast:
+        break  # cycle found
 ```
 
 ## Sliding Window
@@ -26,45 +29,38 @@ def twoPointers(nums, target):
 **Best for:** "Longest/shortest substring" or "subarray" with a specific condition.
 
 ```python
-def slidingWindow(nums, k):
-    left = 0
-    current_state = 0
-    best_result = 0
-    
-    for right in range(len(nums)):
-        # 1. Add nums[right] to current_state
-        current_state += nums[right]
-        
-        # 2. If window is invalid, shrink from the left
-        while current_state > k: # (Replace with specific condition)
-            current_state -= nums[left]
-            left += 1
-            
-        # 3. Update the best result
-        best_result = max(best_result, right - left + 1)
-        
-    return best_result
+left = 0
+
+for right in range(len(arr)):
+    # expand the window by including arr[right]
+
+    while window_is_invalid():
+        # shrink the window from the left
+        left += 1
+
+    # update the best answer using the window [left, right]
 ```
 
-## HashMap / HashSet
+## HashMap & HashSet
 
-**Best for:** Tracking frequencies, finding duplicates, or fast $O(1)$ lookups (like Two Sum complements).
+**Best for:** Tracking frequencies, finding duplicates, or fast lookups.
+
+**Note:** A `set` is just a `dict` that only stores keys (no values) - both use hashing, so both give $O(1)$ average time.
 
 ```python
-def hashMapTemplate(nums, target):
-    seen = {} # val : index
-    
-    for i, num in enumerate(nums):
-        complement = target - num
-        
-        # O(1) fast lookup
-        if complement in seen:
-            return [seen[complement], i]
-            
-        # Store for future lookups
-        seen[num] = i
-        
-    return []
+# HashMap - use when you need to store a value per key (count, index, etc.)
+counts = {}
+counts[x] = 1        # add      -> O(1)
+del counts[x]        # remove   -> O(1)
+x in counts          # lookup   -> O(1)
+```
+
+```python
+# HashSet - use when you only need to know "have I seen this?"
+seen = set()
+seen.add(x)         # add      -> O(1)
+seen.remove(x)      # remove   -> O(1)
+x in seen           # lookup   -> O(1)
 ```
 
 ## Binary Search
@@ -72,21 +68,15 @@ def hashMapTemplate(nums, target):
 **Best for:** Finding a target in a **sorted** array in $O(\log N)$ time.
 
 ```python
-def binarySearch(nums, target):
-    left = 0
-    right = len(nums) - 1
-    
-    while left <= right:
-        mid = left + (right - left) // 2
-        
-        if nums[mid] == target:
-            return mid
-        elif nums[mid] < target:
-            left = mid + 1  # Target is in the right half
-        else:
-            right = mid - 1 # Target is in the left half
-            
-    return -1
+left, right = 0, len(arr) - 1
+
+while left <= right:
+    mid = (left + right) // 2
+
+    if condition(arr[mid]):
+        left = mid + 1   # search the right half
+    else:
+        right = mid - 1  # search the left half
 ```
 
 ## Dynamic Programming
@@ -94,43 +84,46 @@ def binarySearch(nums, target):
 **Best for:** Optimization ("max/min"), counting "number of ways", overlapping subproblems.
 
 ```python
-# Bottom-Up Tabulation Template (1D)
-def dpTemplate(n, costs):
-    if n == 0: return 0
-    
-    # 1. Initialize DP array
-    dp = [0] * (n + 1)
-    
-    # 2. Set Base Cases
-    dp[0] = costs[0]
-    dp[1] = costs[1]
-    
-    # 3. Build up from smallest subproblems
-    for i in range(2, n + 1):
-        dp[i] = min(dp[i-1], dp[i-2]) + costs[i]
-        
-    return dp[n]
+dp = {}
+
+def solve(state):
+    if state in dp:
+        return dp[state]
+    if is_base_case(state):
+        return base_value
+
+    dp[state] = combine(solve(next_state_1), solve(next_state_2))
+    return dp[state]
 ```
 
-## Linked List
+## Linked Lists
 
-**Best for:** Iterating through nodes, fast/slow cycle detection.
+**Best for:** Traversing, modifying, or reversing nodes (fast/slow variant lives under Two Pointers).
 
 ```python
-def linkedListTraversal(head):
-    # Always use a dummy node if the head might change!
-    dummy = ListNode(0)
-    dummy.next = head
-    curr = dummy.next
-    
-    while curr is not None:
-        # Do something with curr.val
-        curr = curr.next
-        
-    return dummy.next
+# Traversal - use a dummy node if the head itself might change
+dummy = ListNode(next=head)
+curr = dummy
+
+while curr.next:
+    # inspect or modify curr.next here
+    curr = curr.next
 ```
 
-## Tree / Binary Tree / BST
+```python
+# Reversal - flip each node's `next` pointer as you walk the list
+prev, curr = None, head
+
+while curr:
+    next_node = curr.next
+    curr.next = prev
+    prev = curr
+    curr = next_node
+
+head = prev
+```
+
+## Trees + DFS/BFS
 
 **Best for:** Hierarchical data. Use DFS for deep paths, BFS for level-by-level.
 
@@ -145,6 +138,57 @@ def dfs(node):
     # In-order processing here
     dfs(node.right)
     # Post-order processing here
+```
+
+```python
+# Standard BFS for Level-Order / Shortest Path
+from collections import deque
+
+def bfs(root):
+    if not root: return
+
+    queue = deque([root])
+
+    while queue:
+        level_size = len(queue)
+        for _ in range(level_size):
+            node = queue.popleft()
+
+            # process node here
+
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+```
+
+## Backtracking
+
+**Best for:** Generating all combinations, permutations, or subsets.
+
+```python
+def backtrack(path, choices):
+    if is_solution(path):
+        results.append(path[:])  # Save a copy
+        return
+
+    for choice in choices:
+        path.append(choice)            # 1. Choose
+        backtrack(path, next_choices)  # 2. Explore
+        path.pop()                     # 3. Un-choose (backtrack)
+```
+
+## Graphs
+
+**Best for:** Connected components, islands, shortest paths, topological order.
+
+```python
+# Standard DFS over an adjacency list / grid
+def dfs(node, visited, graph):
+    if node in visited:
+        return
+    visited.add(node)
+
+    for neighbor in graph[node]:
+        dfs(neighbor, visited, graph)
 ```
 
 ## Structure Traversal (See Step 2)
@@ -166,35 +210,6 @@ def traverseLinkedList(head):
         curr = curr.next
 ```
 
-## DFS / BFS
-
-**Best for:** Trees, Graphs, Matrices, and finding all combinations.
-
-```python
-# Standard BFS for Level-Order / Shortest Path
-from collections import deque
-
-def bfs(root):
-    if not root: return
-    
-    queue = deque([root])
-    steps = 0
-    
-    while queue:
-        level_size = len(queue)
-        for _ in range(level_size):
-            node = queue.popleft()
-            
-            # Process node here
-            
-            if node.left: queue.append(node.left)
-            if node.right: queue.append(node.right)
-            
-        steps += 1
-        
-    return steps
-```
-
 ## Heap & Priority Queue
 
 **Best for:** "Top K" elements, running median, sorting dynamically.
@@ -202,18 +217,11 @@ def bfs(root):
 ```python
 import heapq
 
-def topKElements(nums, k):
-    min_heap = []
-    
-    for num in nums:
-        heapq.heappush(min_heap, num)
-        
-        # Keep only the Top K largest elements in the heap
-        if len(min_heap) > k:
-            heapq.heappop(min_heap)
-            
-    # The root of the min_heap is the Kth largest element
-    return min_heap[0] 
+heap = []
+heapq.heappush(heap, value)   # add an item, O(log N)
+smallest = heapq.heappop(heap)  # remove + return smallest, O(log N)
+
+# No max-heap in Python - push negated values to simulate one
 ```
 
 ## Math & Geometry
