@@ -98,10 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // One flat light tint per section instead of a 13-color rainbow, so color
         // communicates *category* (structure) rather than being assigned at random.
         const sectionPalettes = {
-            'step-2-analyze-input-format': ['#DBEAFE'],              // light blue
+            'step-2-analyze-input-format': ['#D1FAE5'],              // light green (paired with Output)
             'analyze-output-format': ['#D1FAE5'],                    // light green
             'step-3-keyword-pattern-recognition': ['#EDE9FE'],       // light violet
-            'space-constraints': ['#FED7AA']                        // light orange (matches theme)
+            'step-1-time-constraints': ['#DBEAFE'],                  // light blue
+            'space-constraints': ['#DBEAFE']                        // light blue (paired with Time)
         };
         const sectionCounters = {};
 
@@ -149,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dictionaries.step3 = extract('analyze-output-format', false);
         dictionaries.step4 = extract('step-3-keyword-pattern-recognition', true);
         dictionaries.space = extract('space-constraints', true);
+        extract('step-1-time-constraints', true); // colors the cards only, not used for matching
         dictionaries.master = { ...dictionaries.step2, ...dictionaries.step3, ...dictionaries.step4, ...dictionaries.space };
     }
 
