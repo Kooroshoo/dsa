@@ -18,14 +18,14 @@ plugins:
 
 ### Algorithms {.col-span-2}
 
-| Algorithm | Best For | Typical Complexity |
-| :--- | :--- | :--- |
-| **HashMap & HashSet** | Counting, duplicates, fast O(1) lookups | $O(N)$ |
-| **Two Pointers** | Sorted arrays, palindromes, pair sums | $O(N)$ |
-| **Binary Search** | Sorted data, finding a target/boundary | $O(\log N)$ |
-| **Sliding Window** | Contiguous subarray/substring problems | $O(N)$ |
-| **Linked Lists** | Node traversal, cycles, reversal | $O(N)$ |
-| **Trees + DFS/BFS** | Hierarchical data, paths, level order | $O(N)$ |
+| Algorithm | Best For |
+| :--- | :--- |
+| **HashMap & HashSet** | Counting, duplicates, fast lookups |
+| **Two Pointers** | Sorted arrays, palindromes, pair sums |
+| **Binary Search** | Sorted data, finding a target/boundary |
+| **Sliding Window** | Contiguous subarray/substring problems |
+| **Linked Lists** | Node traversal, cycles, reversal |
+| **Trees + DFS/BFS** | Hierarchical data, paths, level order |
 
 ## Step 1: Time Constraints
 

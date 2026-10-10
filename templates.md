@@ -48,19 +48,26 @@ for right in range(len(arr)):
 **Note:** A `set` is just a `dict` that only stores keys (no values) - both use hashing, so both give $O(1)$ average time.
 
 ```python
-# HashMap - use when you need to store a value per key (count, index, etc.)
-counts = {}
-counts[x] = 1        # add      -> O(1)
-del counts[x]        # remove   -> O(1)
-x in counts          # lookup   -> O(1)
+hashmap = {}
+
+hashmap[key] = value                    # insert/update  -> O(1)
+hashmap[key]                            # lookup         -> O(1)
+hashmap.get(key)                        # safe lookup    -> O(1)
+key in hashmap                          # contains       -> O(1)
+del hashmap[key]                        # remove         -> O(1)
+for key, value in hashmap.items():      # iterate        -> O(N)
+    pass
 ```
 
 ```python
-# HashSet - use when you only need to know "have I seen this?"
-seen = set()
-seen.add(x)         # add      -> O(1)
-seen.remove(x)      # remove   -> O(1)
-x in seen           # lookup   -> O(1)
+hashset = set()
+
+hashset.add(value)                      # insert      -> O(1)
+value in hashset                        # contains    -> O(1)
+hashset.remove(value)                   # remove      -> O(1)
+hashset.discard(value)                  # safe remove -> O(1)
+for value in hashset:                   # iterate     -> O(N)
+    pass
 ```
 
 ## Binary Search
