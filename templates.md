@@ -55,6 +55,10 @@ hashmap[key]                            # lookup         -> O(1)
 hashmap.get(key)                        # safe lookup    -> O(1)
 key in hashmap                          # contains       -> O(1)
 del hashmap[key]                        # remove         -> O(1)
+for key in hashmap.keys():              # iterate        -> O(N)
+    pass
+for value in hashmap.values():          # iterate        -> O(N)
+    pass
 for key, value in hashmap.items():      # iterate        -> O(N)
     pass
 ```
