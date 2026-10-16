@@ -64,7 +64,7 @@ for key, value in hashmap.items():      # iterate        -> O(N)
 ```
 
 ```python
-hashset = set()                         # or set(nums)
+hashset = set()
 
 hashset.add(value)                      # insert      -> O(1)
 value in hashset                        # contains    -> O(1)
