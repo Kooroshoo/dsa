@@ -79,29 +79,23 @@ for right in range(len(arr)):
 ```python
 hashmap = {}
 
-hashmap[key] = value                    # insert/update  -> O(1)
-hashmap[key]                            # lookup         -> O(1)
-hashmap.get(key)                        # safe lookup    -> O(1)
-key in hashmap                          # contains       -> O(1)
-del hashmap[key]                        # remove         -> O(1)
+hashmap[key] = value                    # insert/update 
+hashmap[key]                            # lookup 
+key in hashmap                          # contains  
+del hashmap[key]                        # remove  
 
-for key in hashmap.keys():              # iterate        -> O(N)
-    pass
-for value in hashmap.values():          # iterate        -> O(N)
-    pass
-for key, value in hashmap.items():      # iterate        -> O(N)
+for key, value in hashmap.items():      # iterate  
     pass
 ```
 
 ```python
 hashset = set()
 
-hashset.add(value)                      # insert      -> O(1)
-value in hashset                        # contains    -> O(1)
-hashset.remove(value)                   # remove      -> O(1)
-hashset.discard(value)                  # safe remove -> O(1)
+hashset.add(value)                      # insert     
+value in hashset                        # contains  
+hashset.remove(value)                   # remove 
 
-for value in hashset:                   # iterate     -> O(N)
+for value in hashset:                   # iterate 
     pass
 ```
 
