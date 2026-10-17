@@ -7,10 +7,13 @@
 left, right = 0, len(arr) - 1
 
 while left < right:
-    if condition(arr[left], arr[right]):
-        left += 1   # move left pointer inward
+    if condition():
+        left += 1
+    elif condition():
+        right -= 1
     else:
-        right -= 1  # move right pointer inward
+        left += 1
+        right -= 1
 ```
 
 ```python
