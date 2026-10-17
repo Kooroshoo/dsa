@@ -1,6 +1,8 @@
 ## Linked Lists
 
-**Best for:** Efficient insertion and deletion in sequential data.
+Efficient insertion and deletion in sequential data.
+
+**Best for:** Node traversal, cycles, or reversal.
 
 ```python
 # Traversal
@@ -72,9 +74,11 @@ for right in range(len(arr)):
 
 ## HashMap & HashSet
 
-**Best for:** Fast lookup, insertion, and deletion using hashing.
+Fast lookup, insertion, and deletion using hashing.
 
 **Note:** A `set` is just a `dict` that only stores keys (no values).
+
+**Best for:** Counting, duplicates, or fast lookups.
 
 ```python
 hashmap = {}
