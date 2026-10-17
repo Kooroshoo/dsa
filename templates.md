@@ -74,7 +74,7 @@ for right in range(len(arr)):
 
 **Best for:** Fast lookup, insertion, and deletion using hashing.
 
-**Note:** A `set` is just a `dict` that only stores keys (no values), both use hashing.
+**Note:** A `set` is just a `dict` that only stores keys (no values).
 
 ```python
 hashmap = {}
