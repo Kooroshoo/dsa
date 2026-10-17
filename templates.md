@@ -15,9 +15,9 @@ while curr.next:
 # Reversal 
 before, curr = None, head
 
-while curr:                             # flip next pointers
+while curr:                             
     after = curr.next
-    curr.next = before
+    curr.next = before                  # flip next pointers
     before = curr
     curr = after
 
