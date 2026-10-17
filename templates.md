@@ -113,7 +113,7 @@ left, right = 0, len(arr) - 1
 while left <= right:
     mid = (left + right) // 2
 
-    if condition(arr[mid]):
+    if condition():
         left = mid + 1   # search the right half
     else:
         right = mid - 1  # search the left half
