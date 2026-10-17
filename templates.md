@@ -17,7 +17,7 @@ before, curr = None, head
 
 while curr:                             
     after = curr.next
-    curr.next = before                  # flip next pointers
+    curr.next = before                  # flip pointers
     before = curr
     curr = after
 
