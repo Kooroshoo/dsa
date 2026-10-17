@@ -1,3 +1,29 @@
+## Linked Lists
+
+**Best for:** Efficient insertion and deletion in sequential data.
+
+```python
+# Traversal
+dummy = ListNode(next=head)             # use dummy if head might change
+curr = dummy
+
+while curr.next:
+    curr = curr.next
+```
+
+```python
+# Reversal 
+before, curr = None, head
+
+while curr:                             # flip next pointers
+    after = curr.next
+    curr.next = before
+    before = curr
+    curr = after
+
+head = before
+```
+
 ## Two Pointers
 
 **Best for:** Sorted arrays, searching for pairs, palindromes, or comparing ends.
@@ -17,14 +43,14 @@ while left < right:
 ```
 
 ```python
-# Variant 2: fast & slow - same start, different speed (cycle detection, middle of list)
+# Variant 2: fast & slow - same start, different speed
 slow, fast = head, head
 
 while fast and fast.next:
     slow = slow.next
     fast = fast.next.next
-    if slow == fast:
-        break  # cycle found
+    if condition():
+        break
 ```
 
 ## Sliding Window
@@ -46,7 +72,7 @@ for right in range(len(arr)):
 
 ## HashMap & HashSet
 
-**Best for:** Tracking frequencies, finding duplicates, or fast lookups.
+**Best for:** Fast lookup, insertion, and deletion using hashing.
 
 **Note:** A `set` is just a `dict` that only stores keys (no values) - both use hashing, so both give $O(1)$ average time.
 
@@ -58,6 +84,7 @@ hashmap[key]                            # lookup         -> O(1)
 hashmap.get(key)                        # safe lookup    -> O(1)
 key in hashmap                          # contains       -> O(1)
 del hashmap[key]                        # remove         -> O(1)
+
 for key in hashmap.keys():              # iterate        -> O(N)
     pass
 for value in hashmap.values():          # iterate        -> O(N)
@@ -73,6 +100,7 @@ hashset.add(value)                      # insert      -> O(1)
 value in hashset                        # contains    -> O(1)
 hashset.remove(value)                   # remove      -> O(1)
 hashset.discard(value)                  # safe remove -> O(1)
+
 for value in hashset:                   # iterate     -> O(N)
     pass
 ```
@@ -108,33 +136,6 @@ def solve(state):
 
     dp[state] = combine(solve(next_state_1), solve(next_state_2))
     return dp[state]
-```
-
-## Linked Lists
-
-**Best for:** Traversing, modifying, or reversing nodes (fast/slow variant lives under Two Pointers).
-
-```python
-# Traversal - use a dummy node if the head itself might change
-dummy = ListNode(next=head)
-curr = dummy
-
-while curr.next:
-    # inspect or modify curr.next here
-    curr = curr.next
-```
-
-```python
-# Reversal - flip each node's `next` pointer as you walk the list
-prev, curr = None, head
-
-while curr:
-    next_node = curr.next
-    curr.next = prev
-    prev = curr
-    curr = next_node
-
-head = prev
 ```
 
 ## Trees + DFS/BFS

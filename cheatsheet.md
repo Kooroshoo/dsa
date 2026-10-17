@@ -21,10 +21,10 @@ plugins:
 | Algorithm | Best For |
 | :--- | :--- |
 | **HashMap & HashSet** | Counting, duplicates, fast lookups |
+| **Linked Lists** | Node traversal, cycles, reversal |
 | **Two Pointers** | Sorted arrays, palindromes, pair sums |
 | **Binary Search** | Sorted data, finding a target/boundary |
 | **Sliding Window** | Contiguous subarray/substring problems |
-| **Linked Lists** | Node traversal, cycles, reversal |
 | **Trees + DFS/BFS** | Hierarchical data, paths, level order |
 
 ## Step 1: Time Constraints
