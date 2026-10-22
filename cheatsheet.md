@@ -25,7 +25,7 @@ plugins:
 | **Two Pointers** | Sorted arrays, palindromes, pair sums |
 | **Binary Search** | Sorted data, finding a target/boundary |
 | **Sliding Window** | Contiguous subarray/substring problems |
-| **Trees + DFS/BFS** | Hierarchical data, paths, level order |
+| **Trees** | Hierarchical data, paths, level order |
 
 ## Step 1: Time Constraints
 
@@ -181,7 +181,7 @@ plugins:
 - "cycle in"
 - "merge two sorted lists"
 
-### Trees + DFS/BFS {.row-span-2}
+### Trees {.row-span-2}
 
 - "binary tree"
 - "BST"

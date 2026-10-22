@@ -57,7 +57,7 @@ while fast and fast.next:
 
 ## Sliding Window
 
-**Best for:** "Longest/shortest substring" or "subarray" with a specific condition.
+**Best for:** Longest/shortest substring or subarray with a condition.
 
 ```python
 left = 0
@@ -65,7 +65,7 @@ left = 0
 for right in range(len(arr)):
     # expand the window by including arr[right]
 
-    while window_is_invalid():
+    while condition():
         # shrink the window from the left
         left += 1
 
@@ -136,19 +136,20 @@ def solve(state):
     return dp[state]
 ```
 
-## Trees + DFS/BFS
+## Trees
 
-**Best for:** Hierarchical data. Use DFS for deep paths, BFS for level-by-level.
+**Best for:** Hierarchical data, traversing paths, or level-order processing.
 
 ```python
 # Standard Recursive DFS
 def dfs(node):
     if node is None:
         return
-        
     # Pre-order processing here
+
     dfs(node.left)
     # In-order processing here
+
     dfs(node.right)
     # Post-order processing here
 ```
@@ -157,20 +158,19 @@ def dfs(node):
 # Standard BFS for Level-Order / Shortest Path
 from collections import deque
 
-def bfs(root):
-    if not root: return
+queue = deque()
+if root:
+    queue.append(root)
 
-    queue = deque([root])
+while queue:
+    for _ in range(len(queue)):
+        node = queue.popleft()
+        # process node here
 
-    while queue:
-        level_size = len(queue)
-        for _ in range(level_size):
-            node = queue.popleft()
-
-            # process node here
-
-            if node.left: queue.append(node.left)
-            if node.right: queue.append(node.right)
+        if node.left:
+            queue.append(node.left)
+        if node.right:
+            queue.append(node.right)
 ```
 
 ## Backtracking
