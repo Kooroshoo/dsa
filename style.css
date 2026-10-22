@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-    /* Medium Orange Theme (warm, visible, but not harsh) */
-    --theme-color: #FDBA74;      
-    --theme-hover: #FB923C;
+    /* Pumpkin Orange Theme */
+    --theme-color: #F0893E;      
+    --theme-hover: #D9732A;
     
     --bg-body: #f8fafc;          
     --card-bg: #ffffff;
@@ -70,7 +70,7 @@ h2.section-title {
     transform: translateY(-2px);
 }
 .cheat-card-header {
-    background-color: #FED7AA;
+    background-color: var(--theme-color);
     color: #1e293b;
     padding: 0.75rem 1.25rem;
     font-size: 0.95rem;
@@ -92,7 +92,7 @@ code[class*="language-"] { font-family: var(--font-mono) !important; font-size: 
 table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
 th { font-weight: 600; color: #0f172a; background: #f8fafc; }
-.table-algo-link { cursor: pointer; color: var(--theme-hover); font-weight: 600; transition: color 0.2s; text-decoration: underline; text-decoration-style: dotted;}
+.table-algo-link { cursor: pointer; color: var(--theme-color); font-weight: 600; transition: color 0.2s; text-decoration: underline; text-decoration-style: dotted;}
 .table-algo-link:hover { color: #000; }
 
 /* --- Custom Test Section --- */
@@ -118,7 +118,7 @@ th { font-weight: 600; color: #0f172a; background: #f8fafc; }
     box-sizing: border-box;
 }
 .custom-input-section input:focus, .custom-input-section textarea:focus {
-    outline: none; border-color: var(--theme-color); background: #fff; box-shadow: 0 0 0 3px rgba(253, 186, 116, 0.3);
+    outline: none; border-color: var(--theme-color); background: #fff; box-shadow: 0 0 0 3px rgba(240, 137, 62, 0.3);
 }
 .custom-input-section textarea { min-height: 120px; resize: vertical; }
 

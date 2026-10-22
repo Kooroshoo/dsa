@@ -1,7 +1,7 @@
 ---
 title: DSA
 date: 2026-03-01 13:19:20
-background: bg-[#FDBA74]
+background: bg-[#F0893E]
 tags:
   - algorithms
   - leetcode
