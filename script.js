@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = marked.parse(content);
-        let grid = null, cardBody = null;
+        let grid = null, cardBody = null, currentCardTitle = '';
 
         Array.from(tempDiv.children).forEach(node => {
             if (node.tagName === 'H2') {
@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (node.tagName === 'H3') {
                 if (!grid) DOM.main.appendChild(grid = Object.assign(document.createElement('div'), { className: 'grid-container' }));
                 const cleanText = node.textContent.replace(/\{.*?\}/g, '').trim();
+                currentCardTitle = cleanText;
                 const card = Object.assign(document.createElement('div'), { className: 'cheat-card' });
                 card.innerHTML = `<div class="cheat-card-header">${cleanText}</div>`;
                 card.appendChild(cardBody = Object.assign(document.createElement('div'), { className: 'cheat-card-body' }));
@@ -77,15 +78,34 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (cardBody) {
                 if (node.tagName === 'TABLE') {
                     const wrap = Object.assign(document.createElement('div'), { className: 'table-wrapper' });
-                    node.querySelectorAll('td:first-child').forEach(cell => {
+                    const rows = Array.from(node.querySelectorAll('tbody tr'));
+                    const isAlgorithmsTable = currentCardTitle === 'Algorithms';
+                    // The 6 highest-priority algorithms stay visible regardless of their row position
+                    const coreAlgorithms = ['HashMap & HashSet', 'Binary Search', 'Trees', 'Graphs', 'Dynamic Programming', 'Heap & Priority Queue'];
+                    rows.forEach(row => {
+                        const cell = row.querySelector('td:first-child');
                         const targetEl = cell.querySelector('strong') || cell;
                         let algoName = targetEl.textContent.trim();
                         if (algoName.includes('Heap')) algoName = 'Heap & Priority Queue';
                         targetEl.classList.add('table-algo-link');
                         targetEl.setAttribute('data-algo', algoName);
+
+                        if (isAlgorithmsTable && !coreAlgorithms.includes(algoName)) row.classList.add('extra-algo-row');
                     });
                     wrap.appendChild(node);
                     cardBody.appendChild(wrap);
+
+                    if (isAlgorithmsTable && rows.some(r => r.classList.contains('extra-algo-row'))) {
+                        const toggleBtn = Object.assign(document.createElement('button'), {
+                            className: 'secondary-btn show-all-btn',
+                            textContent: 'Show All'
+                        });
+                        toggleBtn.addEventListener('click', () => {
+                            const expanded = wrap.classList.toggle('expanded');
+                            toggleBtn.textContent = expanded ? 'Show Less' : 'Show All';
+                        });
+                        cardBody.appendChild(toggleBtn);
+                    }
                 } else {
                     cardBody.appendChild(node);
                 }

@@ -95,6 +95,12 @@ th { font-weight: 600; color: #0f172a; background: #f8fafc; }
 .table-algo-link { cursor: pointer; color: var(--theme-color); font-weight: 600; transition: color 0.2s; text-decoration: underline; text-decoration-style: dotted;}
 .table-algo-link:hover { color: #000; }
 
+/* Collapsed by default, revealed once the wrapping table-wrapper gets .expanded */
+.extra-algo-row { display: none; }
+.table-wrapper.expanded .extra-algo-row { display: table-row; }
+.extra-algo-row .table-algo-link { color: color-mix(in srgb, var(--theme-color) 80%, white); }
+.show-all-btn { display: block; margin: 1rem auto 0; }
+
 /* --- Custom Test Section --- */
 .custom-input-section {
     background: var(--card-bg);
