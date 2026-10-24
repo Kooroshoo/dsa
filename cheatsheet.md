@@ -18,14 +18,14 @@ plugins:
 
 ### Algorithms {.col-span-2}
 
-| Algorithm | Best For |
-| :--- | :--- |
-| **HashMap & HashSet** | Counting, duplicates, fast lookups |
-| **Linked Lists** | Node traversal, cycles, reversal |
-| **Two Pointers** | Sorted arrays, palindromes, pair sums |
-| **Binary Search** | Sorted data, finding a target/boundary |
-| **Sliding Window** | Contiguous subarray/substring problems |
-| **Trees** | Hierarchical data, paths, level order |
+| Algorithm | Best For | LeetCode |
+| :--- | :--- | :--- |
+| **HashMap & HashSet** | Counting, duplicates, fast lookups | <a href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener">#1</a>, <a href="https://leetcode.com/problems/contains-duplicate/" target="_blank" rel="noopener">#217</a>, <a href="https://leetcode.com/problems/valid-anagram/" target="_blank" rel="noopener">#242</a>, <a href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener">#49</a>, <a href="https://leetcode.com/problems/top-k-frequent-elements/" target="_blank" rel="noopener">#347</a> |
+| **Linked Lists** | Node traversal, cycles, reversal | <a href="https://leetcode.com/problems/reverse-linked-list/" target="_blank" rel="noopener">#206</a>, <a href="https://leetcode.com/problems/merge-two-sorted-lists/" target="_blank" rel="noopener">#21</a>, <a href="https://leetcode.com/problems/linked-list-cycle/" target="_blank" rel="noopener">#141</a>, <a href="https://leetcode.com/problems/reorder-list/" target="_blank" rel="noopener">#143</a>, <a href="https://leetcode.com/problems/remove-nth-node-from-end-of-list/" target="_blank" rel="noopener">#19</a> |
+| **Two Pointers** | Sorted arrays, palindromes, pair sums | <a href="https://leetcode.com/problems/valid-palindrome/" target="_blank" rel="noopener">#125</a>, <a href="https://leetcode.com/problems/reverse-string/" target="_blank" rel="noopener">#344</a>, <a href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener">#15</a>, <a href="https://leetcode.com/problems/container-with-most-water/" target="_blank" rel="noopener">#11</a>, <a href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/" target="_blank" rel="noopener">#167</a> |
+| **Binary Search** | Sorted data, finding a target/boundary | <a href="https://leetcode.com/problems/binary-search/" target="_blank" rel="noopener">#704</a>, <a href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noopener">#33</a>, <a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank" rel="noopener">#153</a>, <a href="https://leetcode.com/problems/koko-eating-bananas/" target="_blank" rel="noopener">#875</a>, <a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener">#34</a> |
+| **Sliding Window** | Contiguous subarray/substring problems | <a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">#121</a>, <a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/" target="_blank" rel="noopener">#3</a>, <a href="https://leetcode.com/problems/longest-repeating-character-replacement/" target="_blank" rel="noopener">#424</a>, <a href="https://leetcode.com/problems/permutation-in-string/" target="_blank" rel="noopener">#567</a>, <a href="https://leetcode.com/problems/minimum-size-subarray-sum/" target="_blank" rel="noopener">#209</a> |
+| **Trees** | Hierarchical data, paths, level order | <a href="https://leetcode.com/problems/invert-binary-tree/" target="_blank" rel="noopener">#226</a>, <a href="https://leetcode.com/problems/maximum-depth-of-binary-tree/" target="_blank" rel="noopener">#104</a>, <a href="https://leetcode.com/problems/same-tree/" target="_blank" rel="noopener">#100</a>, <a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener">#102</a>, <a href="https://leetcode.com/problems/validate-binary-search-tree/" target="_blank" rel="noopener">#98</a> |
 
 ## Step 1: Time Constraints
 
