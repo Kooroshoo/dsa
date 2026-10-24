@@ -61,6 +61,7 @@ while fast and fast.next:
 
 ```python
 left = 0
+window = {}     # or window_set = set(), window_sum = 0
 
 for right in range(len(arr)):
     # expand the window by including arr[right]
