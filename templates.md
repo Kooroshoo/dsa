@@ -86,7 +86,7 @@ hashmap = {}
 hashmap[key] = value                    # insert/update 
 hashmap[key]                            # lookup 
 key in hashmap                          # contains  
-del hashmap[key]                        # remove  
+hashmap.pop(key)                        # remove  
 
 for key, value in hashmap.items():      # iterate  
     pass
