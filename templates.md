@@ -143,35 +143,42 @@ def solve(state):
 
 ```python
 # Standard Recursive DFS
-def dfs(node):
-    if node is None:
-        return
-    # pre-order
+def dfs(root):
+    results = []
 
-    dfs(node.left)
-    # in-order
+    def traverse(node):
+        if node is None:
+            return
 
-    dfs(node.right)
-    # post-order
+        # results.append(node.value)  # pre-order
+        traverse(node.left)
+        # results.append(node.value)  # in-order
+        traverse(node.right)
+        # results.append(node.value)  # post-order
+
+    traverse(root)
+    return results
 ```
 
 ```python
-# Standard BFS for Level-Order / Shortest Path
-from collections import deque
+# Standard BFS
+def bfs(node):
+    if node is None:
+        return []
 
-queue = deque()
-if root:
-    queue.append(root)
+    queue = deque()
+    queue.append(node)
+    results = []
 
-while queue:
-    for _ in range(len(queue)):
-        node = queue.popleft()
-        # process node here
+    while queue:
+        current_node = queue.popleft()
+        results.append(current_node.value)
+        if current_node.left:
+            queue.append(current_node.left)
+        if current_node.right:
+            queue.append(current_node.right)
 
-        if node.left:
-            queue.append(node.left)
-        if node.right:
-            queue.append(node.right)
+    return results
 ```
 
 ## Backtracking
