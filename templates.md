@@ -146,13 +146,13 @@ def solve(state):
 def dfs(node):
     if node is None:
         return
-    # Pre-order processing here
+    # pre-order
 
     dfs(node.left)
-    # In-order processing here
+    # in-order
 
     dfs(node.right)
-    # Post-order processing here
+    # post-order
 ```
 
 ```python
