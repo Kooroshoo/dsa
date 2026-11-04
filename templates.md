@@ -143,42 +143,33 @@ def solve(state):
 
 ```python
 # Standard Recursive DFS
-def dfs(root):
-    results = []
+def dfs(node):
+    if not node:
+        return BASE
 
-    def traverse(node):
-        if node is None:
-            return
+    left = dfs(node.left)
+    right = dfs(node.right)
 
-        # results.append(node.value)  # pre-order
-        traverse(node.left)
-        # results.append(node.value)  # in-order
-        traverse(node.right)
-        # results.append(node.value)  # post-order
-
-    traverse(root)
-    return results
+    return RESULT
 ```
 
 ```python
 # Standard BFS
 def bfs(node):
-    if node is None:
-        return []
+    if not node:
+        return BASE
 
     queue = deque()
     queue.append(node)
-    results = []
 
     while queue:
         current_node = queue.popleft()
-        results.append(current_node.value)
         if current_node.left:
             queue.append(current_node.left)
         if current_node.right:
             queue.append(current_node.right)
 
-    return results
+    return RESULT
 ```
 
 ## Backtracking
@@ -337,22 +328,28 @@ def bruteForce(nums):
     return best_ans
 ```
 
-## Stack
+## Stack and Queue
 
-**Best for:** Valid parentheses, undo operations, parsing nested structures.
+**Best for:** Valid parentheses, undo operations, parsing nested structures, or FIFO order.
 
 ```python
-def stackTemplate(s):
-    stack = []
-    
-    for char in s:
-        if char in "({[":       # Open condition
-            stack.append(char)
-        else:                   # Close condition
-            if not stack: 
-                return False
-            top = stack.pop()
-            # Check if 'top' matches 'char' here
-            
-    return len(stack) == 0      # Valid if empty at the end
+# Stack (LIFO)
+stack = []
+
+for item in arr:
+    if condition(item, stack):
+        stack.append(item)
+    else:
+        stack.pop()
+```
+
+```python
+# Queue (FIFO)
+queue = deque()
+
+for item in arr:
+    queue.append(item)
+    while condition(queue):
+        queue.popleft()
+```
 ```
