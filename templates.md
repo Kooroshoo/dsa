@@ -125,16 +125,33 @@ while left <= right:
 **Best for:** Optimization ("max/min"), counting "number of ways", overlapping subproblems.
 
 ```python
-dp = {}
+# Top-down: Recursion + Memoization
+memo = {}
 
-def solve(state):
-    if state in dp:
-        return dp[state]
-    if is_base_case(state):
-        return base_value
+def dp(i):
+    if BASE_CASE:
+        return VALUE
 
-    dp[state] = combine(solve(next_state_1), solve(next_state_2))
-    return dp[state]
+    if i in memo:
+        return memo[i]
+
+    left = dp(i - 1)
+    right = dp(i - 2)
+    memo[i] = RESULT
+    return memo[i]
+```
+
+```python
+# Bottom-up: Iterative DP
+def dp(n):
+    arr = [0] * (n + 1)
+    arr[0] = VALUE
+    arr[1] = VALUE
+
+    for i in range(2, n + 1):
+        arr[i] = RESULT
+
+    return arr[n]
 ```
 
 ## Trees
