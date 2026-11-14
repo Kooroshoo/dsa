@@ -78,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (cardBody) {
                 if (node.tagName === 'TABLE') {
                     const wrap = Object.assign(document.createElement('div'), { className: 'table-wrapper' });
+                    // Empty header cells extend the previous header across their column (e.g. "Patterns")
+                    node.querySelectorAll('thead th').forEach(th => {
+                        const prev = th.previousElementSibling;
+                        if (prev && !th.textContent.trim()) { prev.colSpan += 1; th.remove(); }
+                    });
                     const rows = Array.from(node.querySelectorAll('tbody tr'));
                     const isAlgorithmsTable = currentCardTitle === 'Algorithms';
                     // The 6 highest-priority algorithms stay visible regardless of their row position
@@ -271,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- EVENT LISTENERS & RENDERERS ---
     function setupEventListeners() {
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('algo-tag') || e.target.classList.contains('table-algo-link')) {
+            if (e.target.classList.contains('algo-tag') || e.target.classList.contains('table-algo-link') || e.target.classList.contains('pattern-link')) {
                 const algo = e.target.getAttribute('data-algo');
                 DOM.modalTitle.innerText = algo;
                 DOM.modalBody.innerHTML = templates[algo] || `<p><em>No template found for "${algo}". Add it to templates.md!</em></p>`;

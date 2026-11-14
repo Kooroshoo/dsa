@@ -4,6 +4,7 @@
     /* Pumpkin Orange Theme */
     --theme-color: #F0893E;      
     --theme-hover: #D9732A;
+    --link-color: color-mix(in srgb, var(--theme-color) 90%, black);
     
     --bg-body: #f8fafc;          
     --card-bg: #ffffff;
@@ -92,8 +93,14 @@ code[class*="language-"] { font-family: var(--font-mono) !important; font-size: 
 table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
 th { font-weight: 600; color: #0f172a; background: #f8fafc; }
-.table-algo-link { cursor: pointer; color: var(--theme-color); font-weight: 600; transition: color 0.2s; text-decoration: underline; text-decoration-style: dotted;}
+.table-algo-link { cursor: pointer; color: var(--link-color); font-weight: 600; transition: color 0.2s; text-decoration: underline; text-decoration-style: dotted;}
 .table-algo-link:hover { color: #000; }
+
+.pattern-link { display: block; white-space: nowrap; cursor: pointer; color: var(--link-color); font-weight: 600; text-decoration: underline dotted; transition: color 0.2s; }
+.pattern-link:hover { color: #000; }
+.pattern-problems { display: block; margin-top: 0.2rem; font-size: 0.8rem; white-space: nowrap; }
+.pattern-problems a { color: var(--text-muted); text-decoration: none; margin-right: 0.35rem; }
+.pattern-problems a:hover { color: var(--link-color); text-decoration: underline; }
 
 /* Collapsed by default, revealed once the wrapping table-wrapper gets .expanded */
 .extra-algo-row { display: none; }
