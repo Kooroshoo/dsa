@@ -19,15 +19,28 @@ document.addEventListener('DOMContentLoaded', () => {
     Promise.all([
         fetch('cheatsheet.md').then(r => r.text()),
         fetch('questions.md').then(r => r.ok ? r.text() : null),
-        fetch('templates.md').then(r => r.ok ? r.text() : null)
-    ]).then(([cheatText, questionsText, templatesText]) => {
+        fetch('templates.md').then(r => r.ok ? r.text() : null),
+        fetch('catalog.md').then(r => r.ok ? r.text() : null)
+    ]).then(([cheatText, questionsText, templatesText, catalogText]) => {
         parseTemplates(templatesText);
         renderCheatSheet(cheatText);
         buildDictionaries();
         setupEventListeners();
         renderPreloadedQuestions(questionsText);
+        parseCatalog(catalogText);
         renderMath();
     }).catch(console.error);
+
+    // catalog.md rows "| # | Problem | Algorithm | Pattern |" make popular problems recognisable by name or number
+    function parseCatalog(text) {
+        if (!text) return;
+        text.split('\n').forEach(line => {
+            const cells = line.split('|').map(c => c.trim());
+            if (cells.length < 6 || !/^\d+$/.test(cells[1])) return;
+            const [, num, title, algo, pattern] = cells;
+            knownProblems.push({ key: normTitle(title), num, title, algo, pattern: pattern || undefined });
+        });
+    }
 
     // --- PARSERS & RENDERERS ---
     function parseTemplates(text) {
@@ -265,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const exact = knownProblems.find(k => k.key === q);
         if (exact) return exact;
         const prefix = knownProblems.filter(k => k.key.startsWith(q));
-        return prefix.length === 1 ? prefix[0] : null;
+        return new Set(prefix.map(k => k.key)).size === 1 ? prefix[0] : null;
     }
 
     function analyzeProblem(title, rawDesc) {
@@ -278,15 +291,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const m2 = findMatches(fullTextLower, dictionaries.step2);
         const m3 = findMatches(fullTextLower, dictionaries.step3);
         let known = findKnownProblem((title + ' ' + rawDesc).trim());
+        let knownLine = known ? (title + ' ' + rawDesc).trim() : '';
         // A pasted problem usually starts with its title on the first line
-        if (!known && !title) known = findKnownProblem(rawDesc.trim().split('\n')[0]);
-        const m4 = known
-            ? [{ category: known.algo, known, hits: [], color: dictionaries.step4[known.algo]?.color || '#EDE9FE' }]
-            : rankMatches(fullTextLower, dictionaries.step4);
+        if (!known && !title) {
+            knownLine = rawDesc.trim().split('\n')[0].trim();
+            known = findKnownProblem(knownLine);
+        }
+        // Keywords always run so the matched words can be highlighted, even when the title decides the answer
+        const kwMatches = rankMatches(fullTextLower, dictionaries.step4);
+        const knownColor = dictionaries.step4[known?.algo]?.color || '#EDE9FE';
+        const m4 = known ? [{ category: known.algo, known, hits: [], color: knownColor }] : kwMatches;
         const mS = findMatches(fullTextLower, dictionaries.space);
 
-        const m4Hits = m4.flatMap(m => m.hits.map(kw => ({ matchedKeyword: kw, color: m.color })));
-        let hlDesc = highlightKeywords(cleanDesc, [...m2, ...m3, ...m4Hits, ...mS]);
+        const m4Hits = kwMatches.flatMap(m => m.hits.map(kw => ({ matchedKeyword: kw, color: m.color })));
+        const titleHit = known && knownLine ? [{ matchedKeyword: knownLine, color: knownColor }] : [];
+        let hlDesc = highlightKeywords(cleanDesc, [...titleHit, ...m2, ...m3, ...m4Hits, ...mS]);
         codeBlocks.forEach((block, i) => hlDesc = hlDesc.replace(`__CODE_${i}__`, block));
 
         let algos = [...new Set(m4.map(m => m.category))];

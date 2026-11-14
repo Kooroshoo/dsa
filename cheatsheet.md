@@ -150,6 +150,13 @@ plugins:
 ### HashMap & HashSet
 
 - **"anagram"**
+- **"encode a list of strings"**
+- **"except nums[i]"**
+- **"board is valid"**
+- **"majority element"**
+- **"getrandom"**
+- **"palindrome that can be built"**
+- "majority"
 - **"pair of indices"**
 - **"indices i and j"**
 - **"contains duplicate"**
@@ -174,6 +181,7 @@ plugins:
 ### Two Pointers
 
 - **"palindrome"**
+- **"into a single array"**
 - **"remove duplicates"**
 - **"most water"**
 - **"triplets"**
@@ -190,6 +198,8 @@ plugins:
 ### Sliding Window
 
 - **"longest substring"**
+- **"abs(i - j) <= k"**
+- **"anagrams in"**
 - **"shortest substring"**
 - **"minimum window"**
 - **"contiguous subarray"**
@@ -205,6 +215,7 @@ plugins:
 ### Binary Search
 
 - **"o(log"**
+- **"timestamp"**
 - **"log n"**
 - **"minimize the number of calls"**
 - "guess"
@@ -220,6 +231,7 @@ plugins:
 ### Linked Lists
 
 - **"linked list"**
+- **"only one repeated number"**
 - **"listnode"**
 - "linked-list"
 - "head of"
@@ -229,6 +241,10 @@ plugins:
 ### Stack and Queue
 
 - **"parentheses"**
+- **"car fleet"**
+- **"calculator"**
+- "catch up"
+- "valid expression"
 - **"next greater"**
 - **"reverse polish notation"**
 - **"warmer temperature"**
@@ -246,6 +262,9 @@ plugins:
 ### Heap & Priority Queue
 
 - **"kth largest"**
+- **"capital"**
+- **"k pairs"**
+- **"based on the frequency"**
 - **"kth smallest"**
 - **"k closest"**
 - **"top k"**
@@ -275,6 +294,16 @@ plugins:
 ### Graphs
 
 - **"graph"**
+- **"itinerary"**
+- **"swim"**
+- **"alien"**
+- **"order of the letters"**
+- **"equations"**
+- **"snake"**
+- **"ladder"**
+- **"mutation"**
+- **"belong to the same person"**
+- "tickets"
 - **"island"**
 - **"prerequisite"**
 - **"flood fill"**
@@ -316,6 +345,12 @@ plugins:
 ### Dynamic Programming
 
 - **"distinct ways"**
+- **"number of different expressions"**
+- **"increasing path"**
+- **"burst"**
+- **"maximum possible sum"**
+- **"transaction"**
+- **"largest square"**
 - **"number of ways"**
 - **"fewest"**
 - **"make up that amount"**
@@ -340,6 +375,16 @@ plugins:
 ### Math & Geometry
 
 - **"32-bit"**
+- **"biginteger"**
+- **"represented as strings"**
+- **"axis-aligned square"**
+- **"stream of points"**
+- **"same straight line"**
+- **"binary string"**
+- **"missing"**
+- **"bits"**
+- **"without using the operators"**
+- **"+ and - operators"**
 - **"roman"**
 - **"90 degrees"**
 - **"spiral"**
