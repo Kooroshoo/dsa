@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const patterns = (algoPatterns[a] || []).map(p => `<span class="pattern-link" data-algo="${p.key}">${p.label}</span>`).join('');
             return `<div class="prediction-item">
                 <span class="algo-tag" data-algo="${a}" style="background:${dictionaries.master[a]?.color || '#e2e8f0'}">${a}</span>
-                ${trigger ? `<span class="trigger-word" style="background:${trigger.color}">${trigger.matchedKeyword}</span>` : ''}
+                ${trigger ? `<span class="matched-keywords">matched ${trigger.hits.map(kw => `<span class="trigger-word" style="background:${trigger.color}">"${kw}"</span>`).join('')}</span>` : ''}
                 ${patterns ? `<div class="prediction-patterns">${patterns}</div>` : ''}
             </div>`;
         }).join('');

@@ -172,6 +172,7 @@ button:hover { background: var(--theme-hover); transform: translateY(-1px); }
 .prediction { display: flex; flex-direction: column; gap: 0.5rem; }
 .prediction-item { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
 .prediction-item .trigger-word { margin-left: 0; }
+.matched-keywords { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; font-size: 0.85rem; color: var(--text-muted); }
 .prediction-patterns { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.9rem; }
 .prediction-patterns::before { content: "Patterns:"; color: var(--text-muted); }
 .prediction-patterns .pattern-link { display: inline; }
