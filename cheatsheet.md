@@ -149,99 +149,212 @@ plugins:
 
 ### HashMap & HashSet
 
-- "frequency"
-- "duplicate"
-- "anagram"
-- "complement"
-- "indices"
+- **"anagram"**
+- **"contains duplicate"**
+- **"longest consecutive"**
+- **"least recently used"**
+- "appears at least twice"
+- "every element is distinct"
+- "add up to target"
+- "indices of the two numbers"
+- "subarrays whose sum"
+- "sum equals"
+- **"frequency"**
+- "isomorphic"
+- "non-repeating"
+- "intersection"
+- "number of times"
+- "unique character"
+- **"bijection"**
+- **"distinct indices"**
 
 ### Two Pointers
 
-- "palindrome"
-- "sorted array"
-- "remove duplicates"
-- "most water"
-- "pair sum"
-
-### Binary Search
-
-- "sorted"
-- "kth element"
-- "rotated"
-- "first and last position"
-- "minimize the maximum"
+- **"palindrome"**
+- **"remove duplicates"**
+- **"most water"**
+- **"triplets"**
+- **"trap"**
+- **"palindromic"**
+- "quadruplets"
+- "three integers"
+- **"already sorted"**
+- "relative order"
+- "in-place"
+- "squares"
+- "reverse"
 
 ### Sliding Window
 
-- "longest substring"
-- "shortest substring"
-- "subarray"
+- **"longest substring"**
+- **"shortest substring"**
+- **"minimum window"**
+- **"contiguous subarray"**
+- **"contains a permutation"**
+- "consecutive 1"
+- "at most k"
 - "window"
-- "contains all"
+- "subarray"
+- **"size k"**
+- **"length k"**
+- "substring"
+
+### Binary Search
+
+- **"o(log"**
+- **"log n"**
+- **"minimize the number of calls"**
+- "guess"
+- **"rotated"**
+- **"first and last position"**
+- **"starting and ending position"**
+- **"eating speed"**
+- **"minimize the maximum"**
+- "least weight capacity"
+- "within h hours"
+- "sorted"
 
 ### Linked Lists
 
-- "linked list"
-- "listnode"
-- "reverse linked list"
-- "cycle in"
-- "merge two sorted lists"
-
-### Trees {.row-span-2}
-
-- "binary tree"
-- "BST"
-- "level order"
-- "root to leaf"
-- "lowest common ancestor"
+- **"linked list"**
+- **"listnode"**
+- "linked-list"
+- "head of"
+- "next pointer"
+- "cycle"
 
 ### Stack and Queue
 
-- "parentheses"
+- **"parentheses"**
+- **"next greater"**
+- **"reverse polish notation"**
+- **"warmer temperature"**
+- **"histogram"**
 - "brackets"
+- "monotonic"
 - "stack"
 - "queue"
-- "next greater"
-- "reverse polish notation"
+- **"span"**
+- "previous greater"
+- "next smaller"
+- "directory"
+- "collision"
 
 ### Heap & Priority Queue
 
-- "kth largest"
-- "top k"
-- "k closest"
-- "merge k sorted"
-- "data stream"
+- **"kth largest"**
+- **"kth smallest"**
+- **"k closest"**
+- **"top k"**
+- **"k most frequent"**
+- **"data stream"**
+- **"merge k sorted"**
+- **"k linked-list"**
+- **"heaviest"**
+- **"cpu"**
 - "priority queue"
+- "median"
+- "rearrange"
+- "most recent"
+
+### Trees
+
+- **"binary tree"**
+- **"binary search tree"**
+- "bst"
+- "subtree"
+- "level order"
+- "lowest common ancestor"
+- "leaf"
+- "inorder"
+- "preorder"
 
 ### Graphs
 
-- "graph"
+- **"graph"**
+- **"island"**
+- **"prerequisite"**
+- **"flood fill"**
+- **"4-directionally"**
+- **"province"**
+- "connected components"
+- "directed edges"
+- "network"
+- "neighbors"
 - "edges"
-- "island"
-- "prerequisite"
 - "connected"
+- **"connecting adjacent"**
+- "transformation sequence"
+- "region"
+- **"cheapest"**
+- "nearest"
+- "cities"
 
 ### Backtracking
 
-- "all possible"
-- "generate all"
-- "subset"
+- **"all possible"**
+- **"all the possible"**
+- **"generate all"**
+- **"power set"**
+- **"unique combinations"**
+- **"exists in the grid"**
+- **"well-formed"**
 - "permutation"
 - "combination"
+- "subset"
+- **"n-queens"**
+- **"distinct solutions"**
+- "return all"
+- **"sudoku"**
 
 ### Dynamic Programming
 
-- "number of ways"
-- "distinct ways"
-- "fewest"
-- "subsequence"
+- **"distinct ways"**
+- **"number of ways"**
+- **"fewest"**
+- **"make up that amount"**
+- **"subsequence"**
+- **"largest sum"**
+- **"unique paths"**
+- **"segmented"**
+- **"partition"**
+- **"robber"**
+- **"reach the last index"**
+- **"regular expression"**
 - "maximum amount"
+- "stock"
+- **"staircase"**
+- **"largest product"**
+- "minimum number of operations"
+- **"top-left"**
+- **"top left"**
+- **"number of possible"**
+- **"interleaving"**
 
 ### Math & Geometry
 
+- **"32-bit"**
+- **"roman"**
+- **"90 degrees"**
+- **"spiral"**
+- **"raised to the power"**
+- **"binary representation"**
+- **"except for one"**
+- **"x is a palindrome"**
+- **"integer is a palindrome"**
+- "to an integer"
 - "digit"
-- "roman"
-- "rotate"
-- "spiral"
-- "power"
-- "32-bit"
+- **"power of"**
+- **"prime"**
+- **"square root"**
+- **"factorial"**
+
+### Trie (Prefix Tree)
+
+- **"the trie"**
+- **"a trie"**
+- **"prefix tree"**
+- **"startswith"**
+- **"previously added"**
+- "prefix"
+- "dictionary"

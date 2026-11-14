@@ -139,7 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (curr.classList.contains('grid-container')) {
                     curr.querySelectorAll('.cheat-card').forEach(card => {
                         const title = card.querySelector('.cheat-card-header').textContent.trim();
-                        const items = Array.from(card.querySelectorAll('li')).map(el => el.textContent.trim());
+                        const listItems = Array.from(card.querySelectorAll('li'));
+                        const items = listItems.map(el => el.textContent.trim());
                         const color = palette[sectionCounters[sectionId]++ % palette.length];
                         
                         const cardHeader = card.querySelector('.cheat-card-header');
@@ -160,7 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (title.includes('List of Lists')) kws.push('all possible', 'return all');
                             if (title.includes('Modified Array')) kws.push('in-place', 'modify nums');
                         }
-                        dict[title] = { keywords: [...new Set(kws)].filter(k => k.length > 2), solutions: [title], color };
+                        // Keyword weight: longer phrases are more specific; **bold** keywords are strong triggers
+                        const weights = {};
+                        if (isStrict) listItems.forEach((el, i) => {
+                            weights[kws[i]] = Math.min(kws[i].split(/\s+/).length, 3) + (el.querySelector('strong') ? 3 : 0);
+                        });
+                        dict[title] = { keywords: [...new Set(kws)].filter(k => k.length > 2), weights, solutions: [title], color };
                     });
                 }
                 curr = curr.nextElementSibling;
@@ -187,12 +193,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return { str: "Unknown", html: "Assume Medium constraints: $O(N)$ or $O(N \\log N)$." };
     }
 
+    const keywordRegex = (kw, flags = 'i') => new RegExp(`(?<=\\W|^)(${escapeRegex(kw)}(?:es|s)?)(?=\\W|$)`, flags);
+
+    // Scores every algorithm by the summed weight of its matched keywords and keeps
+    // only those close to the best score, strongest first.
+    function rankMatches(text, dict, { minRatio = 0.6, max = 3 } = {}) {
+        const scored = Object.entries(dict).map(([cat, data]) => {
+            const hits = data.keywords.filter(kw => keywordRegex(kw).test(text));
+            const score = hits.reduce((sum, kw) => sum + (data.weights[kw] || 1), 0);
+            const best = hits.sort((a, b) => (data.weights[b] || 1) - (data.weights[a] || 1))[0];
+            return { category: cat, matchedKeyword: best, hits, color: data.color, score };
+        }).filter(m => m.score > 0).sort((a, b) => b.score - a.score);
+        if (!scored.length) return [];
+        return scored.filter(m => m.score >= scored[0].score * minRatio).slice(0, max);
+    }
+
     function findMatches(text, dict) {
         const matches = [];
         for (const [cat, data] of Object.entries(dict)) {
             for (const kw of data.keywords) {
                 if (!kw) continue;
-                if (new RegExp(`(?<=\\W|^)(${escapeRegex(kw)}(?:es|s)?)(?=\\W|$)`, 'i').test(text)) {
+                if (keywordRegex(kw).test(text)) {
                     matches.push({ category: cat, matchedKeyword: kw, color: data.color });
                     break;
                 }
@@ -205,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let hlText = text;
         const placeholders = [];
         matches.sort((a, b) => b.matchedKeyword.length - a.matchedKeyword.length).forEach(m => {
-            const regex = new RegExp(`(?<=\\W|^)(${escapeRegex(m.matchedKeyword)}(?:es|s)?)(?=\\W|$)`, 'gi');
+            const regex = keywordRegex(m.matchedKeyword, 'gi');
             hlText = hlText.replace(regex, match => {
                 placeholders.push(`<mark style="background-color: ${m.color};">${match}</mark>`);
                 return `__MARK_${placeholders.length - 1}__`;
@@ -219,15 +240,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const codeBlocks = [];
         let cleanDesc = rawDesc.replace(/```[\s\S]*?```|`[\s\S]*?`/g, m => { codeBlocks.push(m); return `__CODE_${codeBlocks.length - 1}__`; });
 
-        const fullTextLower = (title + " " + cleanDesc).toLowerCase();
+        const fullTextLower = (title + " " + cleanDesc).toLowerCase().replace(/\*\*|__/g, '');
         const cInfo = getConstraintInfo((title + " " + rawDesc).toLowerCase());
 
         const m2 = findMatches(fullTextLower, dictionaries.step2);
         const m3 = findMatches(fullTextLower, dictionaries.step3);
-        const m4 = findMatches(fullTextLower, dictionaries.step4);
+        const m4 = rankMatches(fullTextLower, dictionaries.step4);
         const mS = findMatches(fullTextLower, dictionaries.space);
 
-        let hlDesc = highlightKeywords(cleanDesc, [...m2, ...m3, ...m4, ...mS]);
+        const m4Hits = m4.flatMap(m => m.hits.map(kw => ({ matchedKeyword: kw, color: m.color })));
+        let hlDesc = highlightKeywords(cleanDesc, [...m2, ...m3, ...m4Hits, ...mS]);
         codeBlocks.forEach((block, i) => hlDesc = hlDesc.replace(`__CODE_${i}__`, block));
 
         let algos = [...new Set(m4.map(m => m.category))];
