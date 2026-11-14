@@ -75,11 +75,9 @@ for right in range(len(arr)):
 
 ## HashMap & HashSet
 
-Fast lookup, insertion, and deletion using hashing.
+**Best for:** Fast lookup and membership checks.
 
 **Note:** A `set` is just a `dict` that only stores keys (no values).
-
-**Best for:** Counting, duplicates, or fast lookups.
 
 ```python
 hashmap = {}
