@@ -338,12 +338,28 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPreloadedQuestions(text) {
         if (!text) return DOM.questions.innerHTML = "<p>No questions found.</p>";
         DOM.questions.innerHTML = '';
-        const blocks = text.split(/^###\s+/m).filter(b => b.trim());
-        document.querySelector('.preloaded-details > summary').textContent = `Practice Questions (${blocks.length})`;
-        blocks.forEach(block => {
-            const lines = block.split('\n');
-            DOM.questions.appendChild(createQuestionCard(lines[0].trim(), lines.slice(1).join('\n').trim()));
+        let total = 0;
+        // "## Group" headings are optional; questions before any heading go in an untitled group
+        text.split(/^##\s+(?!#)/m).filter(g => g.trim()).forEach(group => {
+            const hasTitle = !group.trimStart().startsWith('#');
+            const title = hasTitle ? group.split('\n')[0].trim() : '';
+            const blocks = group.split(/^###\s+/m).slice(1).filter(b => b.trim());
+            if (!blocks.length) return;
+            total += blocks.length;
+
+            const list = Object.assign(document.createElement('div'), { className: 'questions-list' });
+            blocks.forEach(block => {
+                const lines = block.split('\n');
+                list.appendChild(createQuestionCard(lines[0].trim(), lines.slice(1).join('\n').trim()));
+            });
+            if (title) {
+                const heading = Object.assign(document.createElement('h3'), { className: 'question-group-title' });
+                heading.innerHTML = `${title} <span>${blocks.length}</span>`;
+                DOM.questions.appendChild(heading);
+            }
+            DOM.questions.appendChild(list);
         });
+        document.querySelector('.preloaded-details > summary').textContent = `Practice Questions (${total})`;
     }
 
     function renderMath(el = document.body) {

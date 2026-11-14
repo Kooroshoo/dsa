@@ -167,6 +167,7 @@ plugins:
 - "unique character"
 - **"bijection"**
 - **"distinct indices"**
+- "letters from"
 
 ### Two Pointers
 
@@ -351,6 +352,8 @@ plugins:
 - **"prime"**
 - **"square root"**
 - **"factorial"**
+- "sum of the squares"
+- "matrix"
 
 ### Trie (Prefix Tree)
 
