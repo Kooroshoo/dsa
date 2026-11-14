@@ -173,9 +173,8 @@ button:hover { background: var(--theme-hover); transform: translateY(-1px); }
 .prediction-item { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
 .prediction-item .trigger-word { margin-left: 0; }
 .matched-keywords { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; font-size: 0.85rem; color: var(--text-muted); }
-.prediction-patterns { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.9rem; }
-.prediction-patterns::before { content: "Patterns:"; color: var(--text-muted); }
-.prediction-patterns .pattern-link { display: inline; }
+.prediction-item .pattern-link.likely { display: inline; padding: 0.15rem 0.7rem; border-radius: 999px; text-decoration: none; font-size: 0.85rem; background: color-mix(in srgb, var(--theme-color) 18%, white); border: 1px solid color-mix(in srgb, var(--theme-color) 45%, white); }
+.approach-arrow { color: var(--text-muted); font-weight: 600; margin: 0 -0.25rem; }
 
 .highlighted-text summary { cursor: pointer; color: var(--text-muted); font-size: 0.85rem; }
 .highlighted-text .q-desc { margin: 0.75rem 0 0; }

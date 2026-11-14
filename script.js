@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     
     // Core Data Dictionaries
-    let templates = {}, algoPatterns = {}, dictionaries = { step2: {}, step3: {}, step4: {}, space: {}, master: {} };
+    let templates = {}, algoPatterns = {}, patternSignals = {}, knownProblems = [], dictionaries = { step2: {}, step3: {}, step4: {}, space: {}, master: {} };
 
     // --- INITIALIZATION ---
     Promise.all([
@@ -40,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
             (note ? `<span class="cx-note">${note}</span>` : '') + `</div>`;
         text.split(/^##\s+/m).filter(b => b.trim()).forEach(block => {
             const lines = block.split('\n');
-            templates[lines[0].trim()] = marked.parse(lines.slice(1).join('\n').trim().replace(complexityRe, badges));
+            const lookFor = block.match(/^\*\*Look for:\*\* (.+)$/m);
+            if (lookFor) patternSignals[lines[0].trim()] = [...lookFor[1].matchAll(/"([^"]+)"/g)].map(m => m[1].toLowerCase());
+            templates[lines[0].trim()] = marked.parse(lines.slice(1).join('\n').replace(/^\*\*Look for:\*\*.*\r?\n?/m, '').trim().replace(complexityRe, badges));
         });
     }
 
@@ -97,6 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (isAlgorithmsTable) {
                             algoPatterns[algoName] = Array.from(row.querySelectorAll('.pattern-link'))
                                 .map(p => ({ key: p.getAttribute('data-algo'), label: p.textContent.trim() }));
+                            row.querySelectorAll('.pattern-link').forEach(p => {
+                                p.nextElementSibling?.querySelectorAll('a').forEach(a => {
+                                    const slug = (a.getAttribute('href').match(/problems\/([^/]+)/) || [])[1] || '';
+                                    const title = slug.split('-').map(w => /^(i|ii|iii|iv)$/.test(w) ? w.toUpperCase() : w[0].toUpperCase() + w.slice(1)).join(' ');
+                                    knownProblems.push({ key: normTitle(title), num: a.textContent.replace('#', ''), title, algo: algoName, pattern: p.getAttribute('data-algo') });
+                                });
+                            });
                         }
 
                         if (isAlgorithmsTable && !coreAlgorithms.includes(algoName)) row.classList.add('extra-algo-row');
@@ -242,6 +251,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return hlText;
     }
 
+    // "Two Sum", "2 sum" and "two-sum" all normalize to "2sum"
+    const normTitle = s => s.toLowerCase().replace(/\btwo\b/g, '2').replace(/\bthree\b/g, '3').replace(/\bfour\b/g, '4').replace(/[^a-z0-9]/g, '');
+
+    // A short input like "Two Sum", "1. Two Sum" or "#1" is looked up among the site's problems
+    function findKnownProblem(input) {
+        const s = input.trim();
+        if (!s || s.split(/\s+/).length > 8) return null;
+        const num = s.match(/^#?(\d+)\.?$/);
+        if (num) return knownProblems.find(k => k.num === num[1]) || null;
+        const q = normTitle(s.replace(/^(#\d+|\d+\.)\s+/, ''));
+        if (q.length < 3) return null;
+        const exact = knownProblems.find(k => k.key === q);
+        if (exact) return exact;
+        const prefix = knownProblems.filter(k => k.key.startsWith(q));
+        return prefix.length === 1 ? prefix[0] : null;
+    }
+
     function analyzeProblem(title, rawDesc) {
         const codeBlocks = [];
         let cleanDesc = rawDesc.replace(/```[\s\S]*?```|`[\s\S]*?`/g, m => { codeBlocks.push(m); return `__CODE_${codeBlocks.length - 1}__`; });
@@ -251,7 +277,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const m2 = findMatches(fullTextLower, dictionaries.step2);
         const m3 = findMatches(fullTextLower, dictionaries.step3);
-        const m4 = rankMatches(fullTextLower, dictionaries.step4);
+        let known = findKnownProblem((title + ' ' + rawDesc).trim());
+        // A pasted problem usually starts with its title on the first line
+        if (!known && !title) known = findKnownProblem(rawDesc.trim().split('\n')[0]);
+        const m4 = known
+            ? [{ category: known.algo, known, hits: [], color: dictionaries.step4[known.algo]?.color || '#EDE9FE' }]
+            : rankMatches(fullTextLower, dictionaries.step4);
         const mS = findMatches(fullTextLower, dictionaries.space);
 
         const m4Hits = m4.flatMap(m => m.hits.map(kw => ({ matchedKeyword: kw, color: m.color })));
@@ -261,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let algos = [...new Set(m4.map(m => m.category))];
         if (!algos.length) algos = m2.length ? ['Structure Traversal (See Step 2)'] : ['Ad-Hoc / Brute Force'];
 
-        return { cInfo, m2, m3, m4, mS, hlDesc, algos };
+        return { cInfo, m2, m3, m4, mS, hlDesc, algos, text: fullTextLower };
     }
 
     const createAnalysisCard = (rawDesc) => {
@@ -280,20 +311,47 @@ document.addEventListener('DOMContentLoaded', () => {
         return item;
     };
 
-    function analysisHTML({ cInfo, m2, m3, m4, mS, hlDesc, algos }, { hideDesc = false, hidePrediction = false } = {}) {
+    // Scores an algorithm's patterns by their "Look for" keywords; the best ones are marked likely
+    function rankPatterns(algo, text, forced) {
+        const scored = (algoPatterns[algo] || []).map((p, i) => {
+            const hits = (patternSignals[p.key] || []).filter(kw => keywordRegex(kw).test(text));
+            return { ...p, i, score: forced ? Number(p.key === forced) : hits.reduce((s, kw) => s + Math.min(kw.split(/\s+/).length, 3), 0) };
+        });
+        const top = Math.max(0, ...scored.map(p => p.score));
+        scored.forEach(p => p.likely = top > 0 && p.score >= top * 0.6);
+        return scored.sort((a, b) => (b.likely - a.likely) || (b.score - a.score) || (a.i - b.i));
+    }
+
+    // Patterns from algorithms that weren't predicted, but whose own signals match strongly
+    function crossPatterns(algos, text) {
+        const all = Object.keys(algoPatterns).flatMap(a => algoPatterns[a].map(p => ({ ...p, algo: a,
+            score: (patternSignals[p.key] || []).filter(kw => kw.includes(' ') && keywordRegex(kw).test(text)).reduce((s, kw) => s + Math.min(kw.split(/\s+/).length, 3), 0) })));
+        const top = Math.max(0, ...all.map(p => p.score));
+        return all.filter(p => !algos.includes(p.algo) && p.score >= 2 && p.score >= top * 0.6)
+            .sort((a, b) => b.score - a.score).slice(0, 2);
+    }
+
+    function analysisHTML({ cInfo, m2, m3, m4, mS, hlDesc, algos, text }, { hideDesc = false, hidePrediction = false } = {}) {
         const none = text => `<span class="step-none">${text}</span>`;
         const chips = matches => matches.map(m =>
             `<div>${m.category} <span class="trigger-word" style="background:${m.color}">${m.matchedKeyword}</span></div>`).join('');
 
         const predictions = algos.map(a => {
             const trigger = m4.find(m => m.category === a);
-            const patterns = (algoPatterns[a] || []).map(p => `<span class="pattern-link" data-algo="${p.key}">${p.label}</span>`).join('');
-            return `<div class="prediction-item">
-                <span class="algo-tag" data-algo="${a}" style="background:${dictionaries.master[a]?.color || '#e2e8f0'}">${a}</span>
-                ${trigger ? `<span class="matched-keywords">matched ${trigger.hits.map(kw => `<span class="trigger-word" style="background:${trigger.color}">"${kw}"</span>`).join('')}</span>` : ''}
-                ${patterns ? `<div class="prediction-patterns">${patterns}</div>` : ''}
-            </div>`;
-        }).join('');
+            const likely = rankPatterns(a, text, trigger?.known?.pattern).filter(p => p.likely);
+            const why = !trigger ? ''
+                : trigger.known ? `<span class="matched-keywords">known problem <strong>${trigger.known.num ? '#' + trigger.known.num + ' ' : ''}${trigger.known.title}</strong></span>`
+                : `<span class="matched-keywords">matched ${trigger.hits.map(kw => `<span class="trigger-word" style="background:${trigger.color}">"${kw}"</span>`).join('')}</span>`;
+            const tag = `<span class="algo-tag" data-algo="${a}" style="background:${dictionaries.master[a]?.color || '#e2e8f0'}">${a}</span>`;
+            // One row per fitting approach: algorithm › pattern (algorithm alone if no pattern fits)
+            return (likely.length ? likely : [null]).map(p => `<div class="prediction-item">
+                ${tag}${p ? `<span class="approach-arrow">›</span><span class="pattern-link likely" data-algo="${p.key}">${p.label}</span>` : ''}
+                ${why}
+            </div>`).join('');
+        }).join('') + (m4.some(m => m.known) ? '' : crossPatterns(algos, text).map(p => `<div class="prediction-item">
+                <span class="algo-tag" data-algo="${p.algo}" style="background:${dictionaries.master[p.algo]?.color || '#e2e8f0'}">${p.algo}</span><span class="approach-arrow">›</span><span class="pattern-link likely" data-algo="${p.key}">${p.label}</span>
+                <span class="matched-keywords">also fits</span>
+            </div>`).join(''));
 
         const desc = `<div class="q-desc">${marked.parse(hlDesc)}</div>`;
         const prediction = hidePrediction
@@ -356,6 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const list = Object.assign(document.createElement('div'), { className: 'questions-list' });
             blocks.forEach(block => {
                 const lines = block.split('\n');
+                if (title) knownProblems.push({ key: normTitle(lines[0]), title: lines[0].trim(), algo: title });
                 list.appendChild(createQuestionCard(lines[0].trim(), lines.slice(1).join('\n').trim()));
             });
             if (title) {

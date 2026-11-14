@@ -150,6 +150,8 @@ plugins:
 ### HashMap & HashSet
 
 - **"anagram"**
+- **"pair of indices"**
+- **"indices i and j"**
 - **"contains duplicate"**
 - **"longest consecutive"**
 - **"least recently used"**

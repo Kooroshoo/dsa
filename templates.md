@@ -29,6 +29,8 @@ node.next = new
 
 **Time:** $O(n)$ · **Space:** $O(1)$
 
+**Look for:** "reverse", "reversed"
+
 ```python
 prev, curr = None, head
 
@@ -46,6 +48,8 @@ return prev                             # new head
 **Best for:** Merging two sorted linked lists into one.
 
 **Time:** $O(n + m)$ · **Space:** $O(1)$
+
+**Look for:** "merge", "sorted linked list", "splicing"
 
 ```python
 dummy = tail = ListNode()
@@ -68,6 +72,8 @@ return dummy.next
 **Best for:** Detecting cycles, finding the middle, or the nth node from the end.
 
 **Time:** $O(n)$ · **Space:** $O(1)$
+
+**Look for:** "cycle", "middle", "from the end", "nth node", "palindrome", "reorder"
 
 ```python
 slow = fast = head
@@ -105,6 +111,8 @@ while left < right:
 
 **Time:** $O(n)$ · **Space:** $O(1)$ (3Sum: O(n^2) after sorting)
 
+**Look for:** "palindrome", "sorted", "most water", "container", "triplets", "pair", "already sorted", "trap", "reverses", "closest", "quadruplets", "target"
+
 ```python
 left, right = 0, len(arr) - 1
 
@@ -123,6 +131,8 @@ while left < right:
 **Best for:** In-place array edits like removing duplicates or moving zeroes.
 
 **Time:** $O(n)$ · **Space:** $O(1)$
+
+**Look for:** "in-place", "remove duplicates", "relative order", "move all", "remove all occurrences"
 
 ```python
 slow = 0                                # next position for a kept element
@@ -158,6 +168,8 @@ for right in range(len(arr)):
 
 **Time:** $O(n)$ · **Space:** $O(k)$ (k = items in the window)
 
+**Look for:** "longest substring", "longest", "shortest", "minimal length", "at most k", "without repeating"
+
 ```python
 left = 0
 window = {}
@@ -178,6 +190,8 @@ for right in range(len(arr)):
 **Best for:** Subarrays or substrings of exactly size k.
 
 **Time:** $O(n)$ · **Space:** $O(1)$ (O(k) with a count dict)
+
+**Look for:** "length k", "size k", "equal to k", "permutation", "window of size"
 
 ```python
 window = sum(arr[:k])                   # or a count dict for strings
@@ -225,6 +239,8 @@ for value in hashset:                   # iterate
 
 **Time:** $O(n)$ · **Space:** $O(n)$
 
+**Look for:** "pair of indices", "indices i and j", "indices of the two numbers", "sum equals", "equals k"
+
 ```python
 seen = {}                               # value -> index
 
@@ -240,6 +256,8 @@ for i, num in enumerate(nums):
 **Best for:** Detecting duplicates or already-visited values.
 
 **Time:** $O(n)$ · **Space:** $O(n)$
+
+**Look for:** "duplicate", "appears at least twice", "distinct", "contains duplicate", "consecutive", "exists", "unsorted"
 
 ```python
 seen = set()
@@ -257,6 +275,8 @@ return False
 **Best for:** Counting occurrences, comparing counts, or grouping.
 
 **Time:** $O(n)$ · **Space:** $O(k)$ (k = distinct values)
+
+**Look for:** "anagram", "frequency", "most frequent", "group", "non-repeating", "count", "letters", "used once", "characters"
 
 ```python
 count = {}
@@ -291,6 +311,8 @@ while left <= right:
 
 **Time:** $O(\log n)$ · **Space:** $O(1)$
 
+**Look for:** "target", "search", "first and last position", "starting and ending position", "insert position", "guess", "pick"
+
 ```python
 left, right = 0, len(arr) - 1
 
@@ -313,6 +335,8 @@ return -1
 **Best for:** Searching a sorted array that was rotated at an unknown pivot.
 
 **Time:** $O(\log n)$ · **Space:** $O(1)$
+
+**Look for:** "rotated", "pivot", "rotated sorted"
 
 ```python
 left, right = 0, len(nums) - 1
@@ -341,6 +365,8 @@ return -1
 **Best for:** "Smallest/largest value that works" when a guess can be checked quickly.
 
 **Time:** $O(n \log R)$ · **Space:** $O(1)$ (R = range of answers, each check is O(n))
+
+**Look for:** "minimum integer", "speed", "capacity", "within h hours", "minimize the maximum", "least weight capacity"
 
 ```python
 left, right = LOW, HIGH                 # range of possible answers
@@ -395,6 +421,8 @@ def dp(n):
 
 **Time:** $O(n)$ · **Space:** $O(n)$ (O(1) keeping only the last two values)
 
+**Look for:** "climb", "staircase", "rob", "houses", "largest sum", "maximum subarray", "decode", "steps", "segmented", "dictionary"
+
 ```python
 dp = [0] * (n + 1)                      # dp[i] = answer for the first i items
 dp[1] = nums[0]
@@ -412,6 +440,8 @@ return dp[n]
 **Best for:** Picking items (coins, weights) to reach a target amount.
 
 **Time:** $O(n \cdot amount)$ · **Space:** $O(amount)$
+
+**Look for:** "coins", "amount", "make up", "partition", "subset sum", "target sum"
 
 ```python
 dp = [float('inf')] * (amount + 1)      # dp[a] = fewest coins to make a
@@ -431,6 +461,8 @@ return dp[amount] if dp[amount] != float('inf') else -1
 
 **Time:** $O(n^2)$ · **Space:** $O(n)$ (O(n \log n) with binary search)
 
+**Look for:** "increasing subsequence", "longest increasing", "subsequence"
+
 ```python
 dp = [1] * len(nums)                    # dp[i] = LIS ending at i
 
@@ -447,6 +479,8 @@ return max(dp)
 **Best for:** Two strings or a grid, where `dp[i][j]` depends on its neighbors (LCS, Edit Distance, Unique Paths).
 
 **Time:** $O(m \cdot n)$ · **Space:** $O(m \cdot n)$ (O(n) keeping only the previous row)
+
+**Look for:** "common subsequence", "edit distance", "operations", "grid", "unique paths", "word1"
 
 ```python
 m, n = len(a), len(b)
@@ -493,6 +527,8 @@ def traverse(node):
 
 **Time:** $O(n)$ · **Space:** $O(h)$ (h = tree height)
 
+**Look for:** "depth", "invert", "same", "identical", "path", "diameter", "balanced", "subtree"
+
 ```python
 def dfs(node):
     if not node:
@@ -509,6 +545,8 @@ def dfs(node):
 **Best for:** Level-order traversal or anything "per level".
 
 **Time:** $O(n)$ · **Space:** $O(w)$ (w = widest level)
+
+**Look for:** "level order", "level by level", "level", "right side", "top to bottom"
 
 ```python
 if not root:
@@ -534,6 +572,8 @@ while queue:
 **Best for:** Using the left < node < right ordering.
 
 **Time:** $O(n)$ · **Space:** $O(h)$ (search/insert: O(h))
+
+**Look for:** "binary search tree", "bst", "kth smallest", "valid bst"
 
 ```python
 def valid(node, low, high):
@@ -570,6 +610,8 @@ def backtrack(path, choices):
 
 **Time:** $O(n \cdot 2^n)$ · **Space:** $O(n)$ (recursion depth)
 
+**Look for:** "subset", "power set"
+
 ```python
 res = []
 
@@ -588,6 +630,8 @@ backtrack(0, [])
 **Best for:** Generating every ordering of the items.
 
 **Time:** $O(n \cdot n!)$ · **Space:** $O(n)$ (recursion depth)
+
+**Look for:** "permutation", "all possible orderings"
 
 ```python
 res = []
@@ -613,6 +657,8 @@ backtrack([], [False] * len(nums))
 **Best for:** Choosing k items, or items that add up to a target.
 
 **Time:** $O(2^n)$ · **Space:** $O(n)$ (exponential; prune early)
+
+**Look for:** "combination", "sum to target", "k numbers", "chosen"
 
 ```python
 res = []
@@ -673,6 +719,8 @@ while queue:
 
 **Time:** $O(m \cdot n)$ · **Space:** $O(m \cdot n)$ (adjacency list: O(V + E))
 
+**Look for:** "island", "grid", "flood fill", "clone", "4-directionally", "neighbors", "region", "rotting"
+
 ```python
 def dfs(r, c):
     if r < 0 or c < 0 or r >= rows or c >= cols:
@@ -695,6 +743,8 @@ for r in range(rows):
 **Best for:** Ordering tasks with prerequisites, or detecting a cycle in a directed graph.
 
 **Time:** $O(V + E)$ · **Space:** $O(V + E)$
+
+**Look for:** "prerequisite", "course", "ordering", "dependencies", "schedule"
 
 ```python
 graph = defaultdict(list)
@@ -724,6 +774,8 @@ return len(order) == n                  # False means there is a cycle
 
 **Time:** $O(\alpha(n))$ · **Space:** $O(n)$ (per operation, practically O(1))
 
+**Look for:** "redundant", "additional edge", "province", "indirectly connected", "connected components", "group"
+
 ```python
 parent = list(range(n))
 
@@ -746,6 +798,8 @@ def union(a, b):
 **Best for:** Shortest path in a graph with **weighted** (non-negative) edges.
 
 **Time:** $O(E \log V)$ · **Space:** $O(V + E)$
+
+**Look for:** "weighted", "travel times", "shortest path", "minimum time", "cheapest", "minimum effort", "signal"
 
 ```python
 graph = defaultdict(list)
@@ -805,6 +859,8 @@ smallest = heapq.heappop(heap)  # remove + return smallest, O(log N)
 
 **Time:** $O(n \log k)$ · **Space:** $O(k)$
 
+**Look for:** "kth largest", "k closest", "top k", "k most frequent", "kth smallest", "k largest"
+
 ```python
 heap = []
 
@@ -823,6 +879,8 @@ return heap[0]                          # kth largest
 **Best for:** Running median, or splitting data into a lower and upper half.
 
 **Time:** $O(\log n)$ · **Space:** $O(n)$ (per add; median is O(1))
+
+**Look for:** "median", "middle value"
 
 ```python
 low, high = [], []                      # max-heap (negated), min-heap
@@ -844,6 +902,8 @@ def median():
 **Best for:** Merging k sorted lists or arrays.
 
 **Time:** $O(N \log k)$ · **Space:** $O(k)$ (N = total elements)
+
+**Look for:** "merge k", "k sorted", "k linked-list", "k linked list", "most recent", "news feed", "feed"
 
 ```python
 heap = []
@@ -887,6 +947,8 @@ int(a / b)                              # divide, truncate toward zero
 
 **Time:** $O(\log n)$ · **Space:** $O(1)$ (one step per digit)
 
+**Look for:** "digit", "reverse", "palindrome", "32-bit"
+
 ```python
 res = 0
 
@@ -901,6 +963,8 @@ while n > 0:
 **Best for:** Rotating, transposing, or spiraling through a 2D grid.
 
 **Time:** $O(n^2)$ · **Space:** $O(1)$ (in place)
+
+**Look for:** "matrix", "rotate", "spiral", "90 degrees", "image"
 
 ```python
 # Rotate 90° clockwise: transpose, then reverse each row
@@ -919,6 +983,8 @@ for row in matrix:
 **Best for:** Computing $x^n$ in $O(\log n)$.
 
 **Time:** $O(\log n)$ · **Space:** $O(1)$
+
+**Look for:** "power", "pow", "raised", "exponent"
 
 ```python
 def power(x, n):
@@ -1012,6 +1078,8 @@ not queue                               # is empty
 
 **Time:** $O(n)$ · **Space:** $O(n)$
 
+**Look for:** "parentheses", "brackets", "well-formed"
+
 ```python
 pairs = {')': '(', ']': '[', '}': '{'}
 stack = []
@@ -1032,6 +1100,8 @@ return not stack
 
 **Time:** $O(n)$ · **Space:** $O(n)$ (each index is pushed and popped once)
 
+**Look for:** "next greater", "next smaller", "previous greater", "warmer", "span", "histogram"
+
 ```python
 res = [0] * len(nums)
 stack = []                              # indices, values decreasing
@@ -1048,6 +1118,8 @@ for i, num in enumerate(nums):
 **Best for:** Evaluating postfix (RPN) or calculator-style expressions.
 
 **Time:** $O(n)$ · **Space:** $O(n)$
+
+**Look for:** "reverse polish notation", "expression", "evaluate", "operators", "calculator"
 
 ```python
 stack = []
