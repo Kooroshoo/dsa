@@ -1,15 +1,3 @@
-### Two Sum
-Given an array of integers, return **indices** of the two numbers such that they add up to a specific target.
-You may assume that each input would have **exactly one solution**, and you may not use the same element twice.
-Constraints: `2 <= nums.length <= 10^4`
-
-**Example:**
-```text
-Given nums = [2, 7, 11, 15], target = 9,
-Because nums[0] + nums[1] = 2 + 7 = 9,
-return [0, 1].
-```
-
 ### Add Two Numbers
 Given two non-empty linked lists representing two non-negative integers with the digits stored in reverse order and each node containing a single digit, add the two numbers and return as a linked list.
 Constraints: `1 <= node count <= 100`
@@ -19,17 +7,6 @@ Constraints: `1 <= node count <= 100`
 Input (2 -> 4 -> 3) + (5 -> 6 -> 4) 
 Output 7 -> 0 -> 8 
 342 + 465 = 807
-```
-
-### Longest Substring Without Repeating Characters
-Given a string find the length of the longest substring without repeating characters. 
-Constraints: `0 <= s.length <= 5 * 10^4`
-
-**Example 1:**
-```text
-Input: "abcabcbb"
-Output: 3
-Explanation: The answer is "abc", with the length of 3
 ```
 
 ### Median of Two Sorted Arrays
@@ -64,16 +41,6 @@ Input: s="PAYPALISHIRING", numRows=3
 Output: "PAHNAPLSIIGYIR"
 ```
 
-### Reverse Integer
-Given a 32-bit signed integer, reverse digits of an integer. For the purpose of this problem assume that your function returns 0 when the reversed integer overflows.
-Constraints: `-2^31 <= x <= 2^31 - 1`
-
-**Example 1:**
-```text
-Input: 123
-Output: 321
-```
-
 ### String to Integer (atoi)
 Implement atoi which converts a string to an integer. The function first discards as many whitespace characters as necessary until the first non-whitespace character is found. Then, starting from this character, takes an optional initial plus or minus sign followed by as many numerical digits as possible and interprets them as a numerical value.
 Constraints: `0 <= s.length <= 200`
@@ -82,17 +49,6 @@ Constraints: `0 <= s.length <= 200`
 ```text
 Input: "4193 with words "
 Output: 4193
-```
-
-### Palindrome Number
-Determines whether an integer is a palindrome. An integer is a palindrome when it reads the same backward as forward.
-Constraints: `-2^31 <= x <= 2^31 - 1`
-
-**Example 1:**
-```text
-Input: -121
-Output: false 
-Explanation: From left to right, it reads -121, meanwhile from right to left it becomes 121-. Therefore it is not a palindrome
 ```
 
 ### Regular Expression Matching
@@ -108,16 +64,6 @@ Input:
 	s="aab" 
 	p="c*a*b" 
 	Output: true
-```
-
-### Container with the Most Water
-Given n non negative integers a1,a2, ... , an where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container such that the container contains the most water.
-Constraints: `n == height.length, 2 <= n <= 10^5`
-
-**Example:**
-```text
-Input: [1,8,6,2,5,4,8,3,7]
-Output: 49
 ```
 
 ### Integer To Roman
@@ -150,20 +96,6 @@ Constraints: `1 <= strs.length <= 200`
 ```text
 Input: ["flower", "flow", "flight"]
 Output: "fl"
-```
-
-### 3Sum
-Given an array "nums" of n integers, are there elements a, b, c in nums such that a+b+c=0? Find all unique triplets in the array which gives the sum of zero. The solution set must not contain duplicate triplets.
-Constraints: `0 <= nums.length <= 3000`
-
-**Example:**
-```text
-Given array nums = [-1, 0, 1, 2, -1, -4]. 
-A solution set is: 
-[
-  [-1, 0, 1],
-  [-1, -1, 2]
-]
 ```
 
 ### 3Sum Closest
@@ -201,36 +133,6 @@ A solution set is:
 ]
 ```
 
-### Remove Nth Node From End of List 
-Given a linked list, remove the n-th node from the end of the list and return its head.
-Constraints: `1 <= sz <= 30`
-
-**Example:**
-```text
-Given linked list: 1 -> 2 -> 3 -> 4 -> 5, and n=2 
-After removing the second node from the end, the linked list becomes 1 -> 2 -> 3 -> 5
-```
-
-### Valid Parentheses
-Given a string containing just the characters '(', ')', '{', '}', '[', ']', determine if the input string is valid. An input string is valid if: Open brackets must be closed by the same type of brackets, and open brackets must be closed in the correct order. Note that an empty string is also considered valid.
-Constraints: `1 <= s.length <= 10^4`
-
-**Example 1:**
-```text
-Input: "()[]{}"
-Output: true 
-```
-
-### Merge Two Sorted Lists
-Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists. 
-Constraints: `0 <= node count <= 50`
-
-**Example:**
-```text
-Input: 1->2->4, 1->3->4
-Output: 1->1->2->3->4->4
-```
-
 ### Generate Parentheses
 Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
 Constraints: `1 <= n <= 8`
@@ -247,21 +149,6 @@ Given n=3, a solution set is:
 ]
 ```
 
-### Merge k Sorted Lists 
-Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
-Constraints: `0 <= k <= 10^4`
-
-**Example:**
-```text
-Input: 
-[
-	1 -> 4 -> 5,
-	1 -> 3 -> 4,
-	2 -> 6
-]
-Output: 1 -> 1 -> 2 -> 3 -> 4 -> 4 -> 5 -> 6
-```
-
 ### LRU Cache 
 Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put. get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1. put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item. Could both of these operations be done in O(1) time complexity?
 Constraints: `1 <= capacity <= 3000`
@@ -275,4 +162,95 @@ cache.put(2, 2);
 cache.get(1);       // returns 1 
 cache.put(3, 3);    // evicts key 2
 cache.get(2);       // returns -1 (not found)
+```
+
+### Minimum Size Subarray Sum
+Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.
+Constraints: `1 <= nums.length <= 10^5`
+
+**Example:**
+```text
+Input: target = 7, nums = [2, 3, 1, 2, 4, 3]
+Output: 2
+Explanation: The subarray [4, 3] has the minimal length.
+```
+
+### Find Minimum in Rotated Sorted Array
+Suppose an array of length n sorted in ascending order is rotated between 1 and n times. Given the sorted rotated array nums of unique elements, return the minimum element of this array. You must write an algorithm that runs in O(log n) time.
+Constraints: `1 <= n <= 5000`
+
+**Example:**
+```text
+Input: nums = [3, 4, 5, 1, 2]
+Output: 1
+```
+
+### Lowest Common Ancestor of a Binary Search Tree
+Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
+Constraints: `2 <= node count <= 10^5`
+
+**Example:**
+```text
+Input: root = [6, 2, 8, 0, 4, 7, 9, null, null, 3, 5], p = 2, q = 8
+Output: 6
+```
+
+### Course Schedule II
+There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai. Return the ordering of courses you should take to finish all courses. If it is impossible, return an empty array.
+Constraints: `1 <= numCourses <= 2000`
+
+**Example:**
+```text
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+Output: [0, 2, 1, 3]
+```
+
+### Number of Provinces
+There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c. A province is a group of directly or indirectly connected cities. Given an n x n matrix isConnected, return the total number of provinces.
+Constraints: `1 <= n <= 200`
+
+**Example:**
+```text
+Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+Output: 2
+```
+
+### Path With Minimum Effort
+You are a hiker given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You start in the top-left cell and want to reach the bottom-right cell, moving up, down, left, or right. A route's effort is the maximum absolute difference in heights between two consecutive cells of the route. Return the minimum effort required.
+Constraints: `1 <= rows, columns <= 100`
+
+**Example:**
+```text
+Input: heights = [[1,2,2],[3,8,2],[5,3,5]]
+Output: 2
+```
+
+### Combinations
+Given two integers n and k, return all possible combinations of k numbers chosen from the range [1, n].
+Constraints: `1 <= n <= 20`
+
+**Example:**
+```text
+Input: n = 4, k = 2
+Output: [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]
+```
+
+### Coin Change II
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money. Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
+Constraints: `1 <= coins.length <= 300`
+
+**Example:**
+```text
+Input: amount = 5, coins = [1, 2, 5]
+Output: 4
+```
+
+### Unique Paths
+There is a robot on an m x n grid. The robot starts at the top-left corner and tries to move to the bottom-right corner. It can only move either down or right at any point in time. Given m and n, return the number of possible unique paths the robot can take.
+Constraints: `1 <= m, n <= 100`
+
+**Example:**
+```text
+Input: m = 3, n = 7
+Output: 28
 ```

@@ -377,6 +377,8 @@ for i in range(2, n + 1):
 return dp[n]
 ```
 
+**Kadane's (max subarray sum, #53):** `curr = max(num, curr + num)`, then `best = max(best, curr)`.
+
 ## Knapsack
 
 **Best for:** Picking items (coins, weights) to reach a target amount.
@@ -408,19 +410,25 @@ for i in range(len(nums)):
 return max(dp)
 ```
 
-## Kadane's Algorithm
+## 2D DP
 
-**Best for:** Maximum sum of a contiguous subarray.
+**Best for:** Two strings or a grid, where `dp[i][j]` depends on its neighbors (LCS, Edit Distance, Unique Paths).
 
 ```python
-best = curr = nums[0]
+m, n = len(a), len(b)
+dp = [[0] * (n + 1) for _ in range(m + 1)]  # dp[i][j] = answer for a[:i], b[:j]
 
-for num in nums[1:]:
-    curr = max(num, curr + num)         # extend or start fresh
-    best = max(best, curr)
+for i in range(1, m + 1):
+    for j in range(1, n + 1):
+        if a[i - 1] == b[j - 1]:
+            dp[i][j] = dp[i - 1][j - 1] + 1                 # characters match (LCS)
+        else:
+            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])      # skip one character
 
-return best
+return dp[m][n]
 ```
+
+**Edit Distance:** on a mismatch use `1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])`.
 
 ## Trees
 
@@ -679,6 +687,29 @@ def union(a, b):
         return False                    # already connected: cycle
     parent[ra] = rb
     return True
+```
+
+## Dijkstra's Algorithm
+
+**Best for:** Shortest path in a graph with **weighted** (non-negative) edges.
+
+```python
+graph = defaultdict(list)
+for u, v, w in edges:
+    graph[u].append((v, w))
+
+dist = {start: 0}
+heap = [(0, start)]                     # (distance, node)
+
+while heap:
+    d, node = heapq.heappop(heap)
+    if d > dist.get(node, float('inf')):
+        continue                        # stale entry
+    for nei, w in graph[node]:
+        nd = d + w
+        if nd < dist.get(nei, float('inf')):
+            dist[nei] = nd
+            heapq.heappush(heap, (nd, nei))
 ```
 
 ## Structure Traversal (See Step 2)
