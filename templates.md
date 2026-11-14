@@ -183,23 +183,25 @@ for right in range(k, len(arr)):
 ```python
 hashmap = {}
 
-hashmap[key] = value                    # insert/update 
-hashmap[key]                            # lookup 
-key in hashmap                          # contains  
-hashmap.pop(key)                        # remove  
+hashmap[key] = value                    # insert/update
+hashmap[key]                            # lookup
+hashmap.get(key, default)               # safe lookup
+key in hashmap                          # contains
+hashmap.pop(key)                        # remove
 
-for key, value in hashmap.items():      # iterate  
+for key, value in hashmap.items():      # iterate
     pass
 ```
 
 ```python
 hashset = set()
 
-hashset.add(value)                      # insert     
-value in hashset                        # contains  
-hashset.remove(value)                   # remove 
+hashset.add(value)                      # insert
+value in hashset                        # contains
+hashset.remove(value)                   # remove
+hashset.discard(value)                  # safe remove
 
-for value in hashset:                   # iterate 
+for value in hashset:                   # iterate
     pass
 ```
 
