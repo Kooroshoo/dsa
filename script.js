@@ -32,9 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- PARSERS & RENDERERS ---
     function parseTemplates(text) {
         if (!text) return;
+        // "**Time:** $..$ · **Space:** $..$ (note)" becomes a row of complexity badges
+        const complexityRe = /^\*\*Time:\*\* (\$[^$]+\$) · \*\*Space:\*\* (\$[^$]+\$)(?: \((.+)\))?[ \t]*\r?$/gm;
+        const badges = (_, time, space, note) =>
+            `<div class="complexity"><span class="cx"><span class="cx-label">Time</span>${time}</span>` +
+            `<span class="cx"><span class="cx-label">Space</span>${space}</span>` +
+            (note ? `<span class="cx-note">${note}</span>` : '') + `</div>`;
         text.split(/^##\s+/m).filter(b => b.trim()).forEach(block => {
             const lines = block.split('\n');
-            templates[lines[0].trim()] = marked.parse(lines.slice(1).join('\n').trim());
+            templates[lines[0].trim()] = marked.parse(lines.slice(1).join('\n').trim().replace(complexityRe, badges));
         });
     }
 
