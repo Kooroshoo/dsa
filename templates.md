@@ -5,25 +5,22 @@ Efficient insertion and deletion in sequential data.
 **Best for:** Node traversal, cycles, or reversal.
 
 ```python
-# Traversal
-dummy = ListNode(next=head)             # use dummy if head might change
-curr = dummy
-
-while curr.next:
-    curr = curr.next
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 ```
 
 ```python
-# Reversal 
-before, curr = None, head
+dummy = ListNode(next=head)             # use dummy if head might change
+curr = dummy
 
-while curr:                             
-    after = curr.next
-    curr.next = before                  # flip pointers
-    before = curr
-    curr = after
+while curr.next:                        # traverse
+    curr = curr.next
 
-head = before
+node.next = node.next.next              # delete the node after node
+new.next = node.next                    # insert new after node
+node.next = new
 ```
 
 ## Linked List Reversal
@@ -84,30 +81,17 @@ while fast and fast.next:
 
 **Best for:** Sorted arrays, searching for pairs, palindromes, or comparing ends.
 
+**Idea:** Two indices move through the data, so one pass replaces a nested loop ($O(N)$ instead of $O(N^2)$).
+
 ```python
-# Variant 1: opposite ends - move toward each other
 left, right = 0, len(arr) - 1
 
 while left < right:
-    if condition():
-        left += 1
-    elif condition():
-        right -= 1
-    else:
-        left += 1
-        right -= 1
+    # use arr[left] and arr[right]
+    # then move left forward, right backward, or both
 ```
 
-```python
-# Variant 2: fast & slow - same start, different speed
-slow, fast = head, head
-
-while fast and fast.next:
-    slow = slow.next
-    fast = fast.next.next
-    if condition():
-        break
-```
+**Note:** The pointers can also start together and move in the same direction.
 
 ## Opposite Ends
 
@@ -145,18 +129,17 @@ return slow                             # length of the kept part
 
 **Best for:** Longest/shortest substring or subarray with a condition.
 
+**Idea:** Keep a window `[left, right]` over the data. Grow it from the right, and shrink it from the left when it breaks a rule.
+
 ```python
 left = 0
-window = {}     # or window_set = set(), window_sum = 0
 
 for right in range(len(arr)):
-    # expand the window by including arr[right]
+    # add arr[right] to the window
 
-    while condition():
-        # shrink the window from the left
-        left += 1
+    # if needed, remove arr[left] and move left forward
 
-    # update the best answer using the window [left, right]
+    # window is arr[left:right + 1], size = right - left + 1
 ```
 
 ## Variable Window
@@ -270,11 +253,15 @@ left, right = 0, len(arr) - 1
 while left <= right:
     mid = (left + right) // 2
 
-    if condition():
-        left = mid + 1   # search the right half
+    if go_right(mid):
+        left = mid + 1                  # search the right half
     else:
-        right = mid - 1  # search the left half
+        right = mid - 1                 # search the left half
 ```
+
+**Which loop?**
+- `while left <= right` with `mid ± 1`: looking for an exact match.
+- `while left < right` with `right = mid`: narrowing down to a boundary (the first value that works).
 
 ## Classic Binary Search
 
@@ -438,34 +425,22 @@ return best
 **Best for:** Hierarchical data, traversing paths, or level-order processing.
 
 ```python
-# Standard Recursive DFS
-def dfs(node):
-    if not node:
-        return BASE
-
-    left = dfs(node.left)
-    right = dfs(node.right)
-
-    return RESULT
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 ```
 
 ```python
-# Standard BFS
-def bfs(node):
+def traverse(node):
     if not node:
-        return BASE
-
-    queue = deque()
-    queue.append(node)
-
-    while queue:
-        current_node = queue.popleft()
-        if current_node.left:
-            queue.append(current_node.left)
-        if current_node.right:
-            queue.append(current_node.right)
-
-    return RESULT
+        return
+    # pre-order: process node here
+    traverse(node.left)
+    # in-order: process node here (sorted order in a BST)
+    traverse(node.right)
+    # post-order: process node here
 ```
 
 ## Tree DFS
@@ -605,14 +580,35 @@ backtrack(0, [], target)
 **Best for:** Connected components, islands, shortest paths, topological order.
 
 ```python
-# Standard DFS over an adjacency list / grid
-def dfs(node, visited, graph):
-    if node in visited:
-        return
-    visited.add(node)
+graph = defaultdict(list)               # adjacency list
 
-    for neighbor in graph[node]:
-        dfs(neighbor, visited, graph)
+for a, b in edges:
+    graph[a].append(b)
+    graph[b].append(a)                  # skip for directed graphs
+```
+
+```python
+# DFS
+visited = set()
+
+def dfs(node):
+    visited.add(node)
+    for nei in graph[node]:
+        if nei not in visited:
+            dfs(nei)
+```
+
+```python
+# BFS (shortest path in an unweighted graph)
+queue = deque([start])
+visited = {start}
+
+while queue:
+    node = queue.popleft()
+    for nei in graph[node]:
+        if nei not in visited:
+            visited.add(nei)
+            queue.append(nei)
 ```
 
 ## Graph DFS / BFS
@@ -776,45 +772,20 @@ return dummy.next
 
 ## Math & Geometry
 
-**Best for:** Digit manipulation, string-to-number conversions, and mathematical mappings.
+**Best for:** Digit manipulation, matrix operations, fast exponentiation.
 
 ```python
-# 1. Digit Extraction (Reverse Integer, Palindrome Number)
-def processDigits(n):
-    res = 0
-    n = abs(n)
-    while n > 0:
-        digit = n % 10            # Pop last digit
-        res = (res * 10) + digit  # Push to new number
-        n = n // 10               # Remove last digit
-    return res
+n % 10                                  # last digit
+n // 10                                 # drop the last digit
+q, r = divmod(n, k)                     # quotient and remainder
+a % b == 0                              # a is divisible by b
+math.gcd(a, b)                          # greatest common divisor
+```
 
-
-# 2. String to Number (atoi)
-def stringToNumber(s):
-    res = 0
-    for char in s:
-        if char.isdigit():
-            digit = int(char)
-            res = (res * 10) + digit # Shift left and add
-    return res
-
-
-# 3. Value Mapping (Integer to Roman)
-def intToRoman(num):
-    # Always order from largest to smallest
-    values = [(1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'), 
-              (100, 'C'), (90, 'XC'), (50, 'L'), (40, 'XL'), 
-              (10, 'X'), (9, 'IX'), (5, 'V'), (4, 'IV'), (1, 'I')]
-    
-    res = []
-    for val, symbol in values:
-        if num == 0: break
-        count = num // val
-        res.append(symbol * count)
-        num = num % val
-        
-    return "".join(res)
+```python
+INT_MAX, INT_MIN = 2**31 - 1, -2**31    # 32-bit limits (overflow checks)
+int(a / b)                              # divide, truncate toward zero
+-7 // 2                                 # -4: floor division rounds down
 ```
 
 ## Digit Manipulation
@@ -917,25 +888,24 @@ def bruteForce(nums):
 **Best for:** Valid parentheses, undo operations, parsing nested structures, or FIFO order.
 
 ```python
-# Stack (LIFO)
 stack = []
 
-for item in arr:
-    if condition(item, stack):
-        stack.append(item)
-    else:
-        stack.pop()
+stack.append(x)                         # push
+stack.pop()                             # pop
+stack[-1]                               # peek
+not stack                               # is empty
 ```
 
 ```python
-# Queue (FIFO)
-queue = deque()
+queue = deque()                         # from collections import deque
 
-for item in arr:
-    queue.append(item)
-    while condition(queue):
-        queue.popleft()
+queue.append(x)                         # enqueue
+queue.popleft()                         # dequeue
+queue[0]                                # peek
+not queue                               # is empty
 ```
+
+**Note:** Don't use `list.pop(0)` as a queue. It's $O(N)$, while `deque.popleft()` is $O(1)$.
 
 ## Matching Brackets
 
