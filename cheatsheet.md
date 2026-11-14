@@ -194,3 +194,54 @@ plugins:
 - "level order"
 - "root to leaf"
 - "lowest common ancestor"
+
+### Stack and Queue
+
+- "parentheses"
+- "brackets"
+- "stack"
+- "queue"
+- "next greater"
+- "reverse polish notation"
+
+### Heap & Priority Queue
+
+- "kth largest"
+- "top k"
+- "k closest"
+- "merge k sorted"
+- "data stream"
+- "priority queue"
+
+### Graphs
+
+- "graph"
+- "edges"
+- "island"
+- "prerequisite"
+- "connected"
+
+### Backtracking
+
+- "all possible"
+- "generate all"
+- "subset"
+- "permutation"
+- "combination"
+
+### Dynamic Programming
+
+- "number of ways"
+- "distinct ways"
+- "fewest"
+- "subsequence"
+- "maximum amount"
+
+### Math & Geometry
+
+- "digit"
+- "roman"
+- "rotate"
+- "spiral"
+- "power"
+- "32-bit"

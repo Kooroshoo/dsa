@@ -19,21 +19,22 @@
     </header>
 
     <main class="container">
-        <div id="main-container"></div>
-        
-        <h2 class="section-title">Test Custom Problem</h2>
-        <div class="custom-input-section">
-            <input type="text" id="custom-title" placeholder="Problem Title (e.g., Trapping Rain Water)" autocomplete="off" />
-            <textarea id="custom-desc" rows="6" placeholder="Paste the full LeetCode description, examples, and constraints here..."></textarea>
-            <div class="button-group">
-                <button id="analyze-btn">Analyze Problem</button>
-                <button id="clear-btn" class="secondary-btn">Clear</button>
+        <section class="analyzer">
+            <h2 class="section-title">Analyze a Problem</h2>
+            <div class="custom-input-section">
+                <textarea id="custom-desc" rows="4" placeholder="Paste a LeetCode problem (description, examples, constraints)..."></textarea>
+                <div class="button-group">
+                    <button id="clear-btn" class="secondary-btn">Clear</button>
+                    <button id="analyze-btn">Analyze</button>
+                </div>
             </div>
-        </div>
-        <div id="custom-result" class="questions-list" style="margin-bottom: 3rem;"></div>
+            <div id="custom-result"></div>
+        </section>
+
+        <div id="main-container"></div>
 
         <details class="preloaded-details">
-            <summary>View Pre-Loaded Questions (questions.md)</summary>
+            <summary>Practice Questions</summary>
             <div id="questions-container" class="questions-list">
                 <p>Loading questions.md...</p>
             </div>

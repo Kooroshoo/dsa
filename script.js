@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modalOverlay: document.getElementById('template-modal'),
         modalTitle: document.getElementById('modal-title'),
         modalBody: document.getElementById('modal-body'),
-        titleInput: document.getElementById('custom-title'),
         descInput: document.getElementById('custom-desc')
     };
 
@@ -14,12 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     
     // Core Data Dictionaries
-    let templates = {}, dictionaries = { step2: {}, step3: {}, step4: {}, space: {}, master: {} };
-    const fallbackHTML = {
-        step2: `<div class="solution-item"><span class="step-none">Standard Array / String / Math (No special data structure).</span></div>`,
-        step3: `<div class="solution-item"><span class="step-none">Standard Value / Basic Array (No specific output format).</span></div>`,
-        space: `<span class="step-none" style="margin-top:0.25rem; display:inline-block;">No strict space constraints detected (Assume O(N) is fine).</span>`
-    };
+    let templates = {}, algoPatterns = {}, dictionaries = { step2: {}, step3: {}, step4: {}, space: {}, master: {} };
 
     // --- INITIALIZATION ---
     Promise.all([
@@ -94,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (algoName.includes('Heap')) algoName = 'Heap & Priority Queue';
                         targetEl.classList.add('table-algo-link');
                         targetEl.setAttribute('data-algo', algoName);
+                        if (isAlgorithmsTable) {
+                            algoPatterns[algoName] = Array.from(row.querySelectorAll('.pattern-link'))
+                                .map(p => ({ key: p.getAttribute('data-algo'), label: p.textContent.trim() }));
+                        }
 
                         if (isAlgorithmsTable && !coreAlgorithms.includes(algoName)) row.classList.add('extra-algo-row');
                     });
@@ -217,13 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return hlText;
     }
 
-    function formatMatches(matches, isInline = false) {
-        if (!matches.length) return '';
-        if (isInline) return matches.map(m => `<div style="margin-top:0.25rem;"><strong>${m.category}</strong> <span class="trigger-word" style="background:${m.color}">${m.matchedKeyword}</span></div>`).join('');
-        return matches.map(m => `<div class="solution-item"><strong>${m.category}</strong> <span class="trigger-word" style="background:${m.color}">${m.matchedKeyword}</span></div>`).join('');
-    }
-
-    const createQuestionCard = (title, rawDesc) => {
+    function analyzeProblem(title, rawDesc) {
         const codeBlocks = [];
         let cleanDesc = rawDesc.replace(/```[\s\S]*?```|`[\s\S]*?`/g, m => { codeBlocks.push(m); return `__CODE_${codeBlocks.length - 1}__`; });
 
@@ -241,37 +233,56 @@ document.addEventListener('DOMContentLoaded', () => {
         let algos = [...new Set(m4.map(m => m.category))];
         if (!algos.length) algos = m2.length ? ['Structure Traversal (See Step 2)'] : ['Ad-Hoc / Brute Force'];
 
-        const qDiv = document.createElement('div');
-        qDiv.className = 'question-card';
-        qDiv.innerHTML = `
-            <h3>${title || "Custom Problem"}</h3>
-            <div class="q-desc">${marked.parse(hlDesc)}</div>
-            <div class="analysis-box">
-                <h4>3-Step Analysis</h4>
-                
-                <div class="step-row">
-                    <span class="step-label">Step 1: Constraints & Complexity</span>
-                    <div class="step-val">
-                        <div style="margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px dashed #cbd5e1;">
-                            <strong style="color: var(--theme-color);">Time [ ${cInfo.str} ]:</strong> ${cInfo.html}
-                        </div>
-                        <div><strong style="color: var(--theme-color);">Space:</strong> ${formatMatches(mS, true) || fallbackHTML.space}</div>
-                    </div>
-                </div>
-                
-                <div class="step-row"><span class="step-label">Step 2: Input Format</span><div class="step-val">${formatMatches(m2) || fallbackHTML.step2}</div></div>
-                <div class="step-row"><span class="step-label">Output Format</span><div class="step-val">${formatMatches(m3) || fallbackHTML.step3}</div></div>
-                <div class="step-row"><span class="step-label">Step 3: Keyword Pattern</span><div class="step-val">${formatMatches(m4) || '<span class="step-none">No obvious trigger words found in the text.</span>'}</div></div>
-                
-                <details class="reveal-verdict"><summary>Reveal Predicted Approach</summary>
-                    <div class="predicted-tags-container">
-                        ${algos.map(a => `<span class="algo-tag" data-algo="${a}" style="background:${dictionaries.master[a]?.color || '#e2e8f0'}; color: #1e293b;">${a}</span>`).join('')}
-                        <div style="width:100%; text-align:center; font-size:0.8rem; color:#64748b; margin-top:10px;">(Click a tag to view template)</div>
-                    </div>
-                </details>
-            </div>`;
-        return qDiv;
+        return { cInfo, m2, m3, m4, mS, hlDesc, algos };
+    }
+
+    const createAnalysisCard = (rawDesc) => {
+        const card = document.createElement('div');
+        card.className = 'analysis-card';
+        card.innerHTML = analysisHTML(analyzeProblem('', rawDesc), { hideDesc: true });
+        return card;
     };
+
+    const createQuestionCard = (title, rawDesc) => {
+        const item = document.createElement('details');
+        item.className = 'question-item';
+        item.innerHTML = `
+            <summary>${title}</summary>
+            <div class="question-body">${analysisHTML(analyzeProblem(title, rawDesc), { hidePrediction: true })}</div>`;
+        return item;
+    };
+
+    function analysisHTML({ cInfo, m2, m3, m4, mS, hlDesc, algos }, { hideDesc = false, hidePrediction = false } = {}) {
+        const none = text => `<span class="step-none">${text}</span>`;
+        const chips = matches => matches.map(m =>
+            `<div>${m.category} <span class="trigger-word" style="background:${m.color}">${m.matchedKeyword}</span></div>`).join('');
+
+        const predictions = algos.map(a => {
+            const trigger = m4.find(m => m.category === a);
+            const patterns = (algoPatterns[a] || []).map(p => `<span class="pattern-link" data-algo="${p.key}">${p.label}</span>`).join('');
+            return `<div class="prediction-item">
+                <span class="algo-tag" data-algo="${a}" style="background:${dictionaries.master[a]?.color || '#e2e8f0'}">${a}</span>
+                ${trigger ? `<span class="trigger-word" style="background:${trigger.color}">${trigger.matchedKeyword}</span>` : ''}
+                ${patterns ? `<div class="prediction-patterns">${patterns}</div>` : ''}
+            </div>`;
+        }).join('');
+
+        const desc = `<div class="q-desc">${marked.parse(hlDesc)}</div>`;
+        const prediction = hidePrediction
+            ? `<details class="reveal-verdict"><summary>Reveal Predicted Approach</summary><div class="prediction">${predictions}</div></details>`
+            : `<div class="prediction"><span class="step-label">Predicted Approach</span>${predictions}</div>`;
+
+        return `
+            ${hideDesc ? '' : desc}
+            <div class="analysis-grid">
+                <div class="analysis-cell"><span class="step-label">Time</span><div><strong>${cInfo.str}</strong> · ${cInfo.html}</div></div>
+                <div class="analysis-cell"><span class="step-label">Space</span>${chips(mS) || none('No strict limit, O(N) is fine')}</div>
+                <div class="analysis-cell"><span class="step-label">Input</span>${chips(m2) || none('Array / String / Number')}</div>
+                <div class="analysis-cell"><span class="step-label">Output</span>${chips(m3) || none('Single value or array')}</div>
+            </div>
+            ${prediction}
+            ${hideDesc ? `<details class="highlighted-text"><summary>Show matched keywords in text</summary>${desc}</details>` : ''}`;
+    }
 
     // --- EVENT LISTENERS & RENDERERS ---
     function setupEventListeners() {
@@ -290,21 +301,24 @@ document.addEventListener('DOMContentLoaded', () => {
         DOM.modalOverlay.addEventListener('click', e => { if (e.target === DOM.modalOverlay) DOM.modalOverlay.classList.add('hidden'); });
 
         document.getElementById('analyze-btn').addEventListener('click', () => {
-            if (!DOM.descInput.value.trim()) return alert("Please paste a problem description to analyze!");
-            DOM.customResult.innerHTML = '';
-            DOM.customResult.appendChild(createQuestionCard(DOM.titleInput.value.trim(), DOM.descInput.value.trim()));
+            if (!DOM.descInput.value.trim()) return DOM.descInput.focus();
+            DOM.customResult.replaceChildren(createAnalysisCard(DOM.descInput.value.trim()));
+            if (typeof Prism !== 'undefined') Prism.highlightAllUnder(DOM.customResult);
             renderMath(DOM.customResult);
         });
 
         document.getElementById('clear-btn').addEventListener('click', () => {
-            DOM.titleInput.value = DOM.descInput.value = DOM.customResult.innerHTML = '';
+            DOM.descInput.value = DOM.customResult.innerHTML = '';
+            DOM.descInput.focus();
         });
     }
 
     function renderPreloadedQuestions(text) {
         if (!text) return DOM.questions.innerHTML = "<p>No questions found.</p>";
         DOM.questions.innerHTML = '';
-        text.split(/^###\s+/m).filter(b => b.trim()).forEach(block => {
+        const blocks = text.split(/^###\s+/m).filter(b => b.trim());
+        document.querySelector('.preloaded-details > summary').textContent = `Practice Questions (${blocks.length})`;
+        blocks.forEach(block => {
             const lines = block.split('\n');
             DOM.questions.appendChild(createQuestionCard(lines[0].trim(), lines.slice(1).join('\n').trim()));
         });
