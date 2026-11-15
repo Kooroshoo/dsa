@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- "HOW TO APPROACH" (3-step tick guide) ---
     // Markdown: "### Name :: question" steps; inside, each "**Label**" + "- option | hint | patterns" list is a row of pick-one chips.
-    // Each step shows ONE tip. In the plan, later steps weigh more: the last step decides, earlier ones break ties.
+    // Each step shows ONE tip. The plan comes from planFor(): if-then rules keyed by the chip labels.
     // "### Examples" + "#### Title" + list makes expandable worked examples.
     let solverGroupId = 0;
     function addToSolver(s, node) {
@@ -210,63 +210,81 @@ document.addEventListener('DOMContentLoaded', () => {
     // "Small (n ≤ 20)" -> "Small" plus a quieter "n ≤ 20" note (needs a space before the bracket, so "O(1)" stays whole)
     const chipLabel = label => label.replace(/\s+\(((?:[^()]|\([^()]*\))*)\)\s*$/, ' <span class="chip-note">$1</span>');
 
-    // How much each pick counts in the plan, keyed by chip or row label (a chip key wins over its row).
-    // The brute force and the input carry most weight; limits and output tip the balance. A tree input
-    // outweighs the brute force: tree problems stay tree problems (e.g. Kth Smallest in a BST).
-    const SOLVER_WEIGHTS = { size: 0.5, memory: 0.5, input: 2, output: 2, check: 4, tree: 5 };
+    // The plan follows the interview script: what you are given → how fast it must be → the obvious slow
+    // solution → the tool that removes its slow part. Each rule is one decision you would say out loud.
+    const SLOW = {            // what each brute force costs (1 = n, 1.5 = n log n, 2 = n², 3 = 2ⁿ), and how to say it
+        'Each item': [1, 'one loop'], 'Pairs': [2, 'every pair (n²)'], 'Subarrays': [2, 'every range (n²)'], 'Best sum': [2, 'every range (n²)'],
+        'Subsets': [3, 'every combination (2ⁿ)'], 'Ways / best': [3, 'every choice (2ⁿ)'], 'Top k': [1.5, 'sorting everything (n log n)'],
+        'Matching': [2, 'scanning for each partner (n²)'], 'Math': [1, 'the long way'] };
+    const SIZE = { Small: [3, 'n ≤ 20'], Medium: [2, 'n ≤ 10³'], Large: [1.5, 'n > 10³'] };   // the costliest brute force each size allows
+    const BY_GIVEN = {        // when one loop is enough, the input decides the tool
+        Number: ['Math & Geometry', 'work digit by digit', 'O(log n)', 'O(1)'], 'Array / string': ['HashMap & HashSet', 'one pass with a hash map', 'O(n)', 'O(n)'],
+        'Sorted array': ['Binary Search', 'sorted → halve the range each step', 'O(log n)', 'O(1)'], 'Linked list': ['Linked Lists', 'walk the pointers', 'O(n)', 'O(1)'],
+        Tree: ['Trees', 'recurse left and right', 'O(n)', 'O(h)'], Graph: ['Graphs', 'visit neighbours, mark visited', 'O(V + E)', 'O(V)'],
+        'Stack / queue': ['Stack and Queue', 'push and pop', 'O(1) per step', 'O(n)'] };
+
+    function planFor({ given, memory, slow }) {
+        const p = (algo, patterns, reason, time, space) => ({ algo, patterns, reason, time, space });
+        const inPlace = memory === 'Constant';
+        switch (slow) {
+            case 'Each item': { const [algo, reason, time, space] = BY_GIVEN[given]; return p(algo, null, reason, time, space); }
+            case 'Pairs':
+                if (given === 'Tree') return p('Trees', ['Tree DFS'], 'compare the trees node by node', 'O(n · m)', 'O(h)');
+                if (given === 'Linked list') return p('Linked Lists', ['Fast & Slow Pointers'], 'walk two pointers along the lists', 'O(n)', 'O(1)');
+                if (given === 'Sorted array' || inPlace)
+                    return p('Two Pointers', ['Opposite Ends', 'Same Direction'], (given === 'Sorted array' ? 'sorted' : 'no extra memory') + ' → walk two pointers', 'O(n)', 'O(1)');
+                return p('HashMap & HashSet', ['Complement', 'Seen', 'Frequency'], 'not sorted, extra memory OK → store what you have seen', 'O(n)', 'O(n)');
+            case 'Subarrays': return p('Sliding Window', ['Variable Window', 'Fixed Window'], 'slide one window instead', 'O(n)', 'O(k)');
+            case 'Best sum': return p('Dynamic Programming', ['1D DP'], 'extend the sum or restart at each item', 'O(n)', 'O(1)');
+            case 'Subsets': return p('Backtracking', ['Subsets', 'Permutations', 'Combinations'], 'you must list them all → choose, explore, undo', 'O(2ⁿ)', 'O(n)');
+            case 'Ways / best':
+                return p('Dynamic Programming', given === 'Graph' ? ['2D DP'] : ['1D DP', 'Knapsack', 'Longest Increasing Subsequence', '2D DP'],
+                    'the same sub-answers repeat → remember them', given === 'Graph' ? 'O(m · n)' : 'O(n) to O(n²)', 'O(n)');
+            case 'Top k':
+                if (given === 'Tree') return p('Trees', ['Binary Search Tree'], 'a BST is already sorted → walk it in order', 'O(h + k)', 'O(h)');
+                if (given === 'Linked list') return p('Heap & Priority Queue', ['K-Way Merge'], 'keep the list heads in a heap', 'O(n log k)', 'O(k)');
+                return p('Heap & Priority Queue', ['Top K', 'Two Heaps', 'K-Way Merge'], 'keep only the best k in a heap', 'O(n log k)', 'O(k)');
+            case 'Matching': return p('Stack and Queue', ['Matching Brackets', 'Expression Evaluation', 'Monotonic Stack'], 'keep waiting items on a stack', 'O(n)', 'O(n)');
+            case 'Math': return p('Math & Geometry', ['Digit Manipulation', 'Matrix Traversal', 'Fast Power'], 'use % 10, bit tricks or index math', 'O(log n) or O(n)', 'O(1)');
+        }
+    }
 
     function updateSolver(s) {
-        const votes = {};      // algorithm -> score from the ticked chips
-        let fix = '';          // the last step's "what to do next" line
-        const named = {};      // algorithm -> patterns the last step's pick points to
-        const patternOwner = key => Object.keys(algoPatterns).find(a => algoPatterns[a].some(p => p.key === key));
-        const pillsOf = html => { const t = document.createElement('div'); t.innerHTML = html; return Array.from(t.querySelectorAll('.pattern-link')); };
-
+        const pick = {};       // row label (lower case) -> ticked chip, without its bracket note
         s.root.querySelectorAll('.solver-row').forEach(row => {
             const picked = [];
             row.querySelectorAll('.solver-group').forEach(g => g.querySelectorAll('input').forEach(input => {
                 input.closest('.solver-chip').classList.toggle('on', input.checked);
-                if (input.checked) picked.push({ ...g.options[input.value], input, row: g.querySelector('.solver-group-label')?.textContent.trim().toLowerCase(),
-                    chip: input.closest('.solver-chip').firstChild.nextSibling?.textContent.trim().toLowerCase() });
+                if (!input.checked) return;
+                const o = g.options[input.value];
+                picked.push({ ...o, input });
+                pick[g.querySelector('.solver-group-label')?.textContent.trim().toLowerCase()] = o.label.replace(/\s+\(.*\)\s*$/, '').trim();
             }));
             // Each step shows one short tip: the most recently ticked choice
             // (a placeholder keeps the line, so the card does not jump in height)
             const lead = picked.find(o => o.input === row.last) || picked[picked.length - 1];
-            const hasTips = Array.from(row.querySelectorAll('.solver-group')).some(g => g.options.some(o => o.hint));
             row.querySelector('.solver-result').innerHTML = lead?.hint
                 ? `<span class="solver-arrow">\u2192</span><span class="solver-hint">${lead.hint}</span>`
-                : hasTips ? `<span class="solver-arrow">\u2192</span><span class="solver-hint-empty">Choose items</span>` : '';
-            const stepNo = Number(row.className.match(/solver-row-(\d+)/)[1]);
-            picked.forEach(o => {
-                const weight = SOLVER_WEIGHTS[o.chip] ?? SOLVER_WEIGHTS[o.row] ?? 1;
-                if (stepNo === s.step && o.fix) fix = o.fix;
-                // A chip lists patterns; each one votes for the algorithm that owns it (once per chip)
-                const counted = new Set();
-                pillsOf(o.pills).forEach((p, i) => {
-                    const algo = patternOwner(p.dataset.algo) || p.dataset.algo;
-                    if (stepNo === s.step && algo !== p.dataset.algo) (named[algo] = named[algo] || []).push({ key: p.dataset.algo, label: p.textContent });
-                    if (counted.has(algo)) return;
-                    counted.add(algo);
-                    votes[algo] = (votes[algo] || 0) + weight - i * 0.01;
-                });
-            });
+                : `<span class="solver-arrow">\u2192</span><span class="solver-hint-empty">Choose items</span>`;
         });
 
-        // Plan: shown once every row has a pick. The top algorithm is the suggestion; others scoring
-        // more than half of it are alternatives. The top suggestion also lists its possible patterns: the ones
-        // the last step's pick points to, or else all of the algorithm's patterns.
+        // Plan: shown once every row has a pick
         const groups = Array.from(s.root.querySelectorAll('.solver-group'));
-        const left = groups.filter(g => !g.querySelector('input:checked')).length, total = groups.length;
-        const sorted = Object.entries(votes).sort((x, y) => y[1] - x[1]);
-        const ranked = left ? [] : sorted.filter(([, v]) => v > sorted[0][1] / 2).slice(0, 2);
-        const patternsOf = algo => (named[algo] || algoPatterns[algo] || [])
-            .map(p => `<span class="pattern-link" data-algo="${p.key}">${p.label}</span>`).join('');
-        const item = ([algo], i) => `<span class="solver-suggest${i === 0 ? ' best' : ''}">
-            <span class="pattern-link" data-algo="${algo}">${algo}</span>${i === 0 && patternsOf(algo) ? `<span class="solver-sep">\u203a</span><span class="solver-patterns">${patternsOf(algo)}</span>` : ''}</span>`;
-        s.plan.innerHTML = `<span class="solver-plan-label">Your plan</span>` + (ranked.length
-            ? item(ranked[0], 0) + (ranked.length > 1 ? `<span class="solver-or">or</span>` + ranked.slice(1).map((r, i) => item(r, i + 1)).join('') : '')
-                + (fix ? `<div class="solver-next"><span class="solver-next-label">Next</span>${fix}</div>` : '')
-            : `<span class="solver-plan-empty">Pick one in each row to see your plan${left < total ? ` (${left} left)` : ''}.</span>`);
+        const left = groups.filter(g => !g.querySelector('input:checked')).length;
+        if (left) {
+            s.plan.innerHTML = `<span class="solver-plan-label">Your plan</span><span class="solver-plan-empty">Pick one in each row to see your plan${left < groups.length ? ` (${left} left)` : ''}.</span>`;
+            return;
+        }
+        const slow = pick['slow way'], r = planFor({ given: pick.given, memory: pick.memory, slow });
+        const keys = r.patterns || (algoPatterns[r.algo] || []).map(x => x.key);
+        const label = key => (algoPatterns[r.algo] || []).find(x => x.key === key)?.label || key;
+        const patterns = keys.map(k => `<span class="pattern-link" data-algo="${k}">${label(k)}</span>`).join('');
+        const [cost, slowSays] = SLOW[slow], [limit, sizeSays] = SIZE[pick.size];
+        const verdict = slow === 'Each item' ? 'one loop is fast enough.' : cost <= limit ? `${slowSays} would still pass.` : `${slowSays} is too slow.`;
+        s.plan.innerHTML = `<span class="solver-plan-label">Your plan</span>
+            <span class="solver-suggest best"><span class="pattern-link" data-algo="${r.algo}">${r.algo}</span>${patterns ? `<span class="solver-sep">\u203a</span><span class="solver-patterns">${patterns}</span>` : ''}</span>
+            <div class="solver-next"><span class="solver-next-label">Why</span>${sizeSays}, so ${verdict} ${r.reason[0].toUpperCase() + r.reason.slice(1)}.</div>
+            <div class="solver-next"><span class="solver-next-label">Target</span>${r.time} time · ${r.space} memory</div>`;
     }
 
     function buildDictionaries() {

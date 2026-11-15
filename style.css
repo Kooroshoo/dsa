@@ -240,12 +240,10 @@ mark { background: #fef08a; padding: 0.1em 0.4em; border-radius: 4px; font-weigh
 [hidden] { display: none !important; }
 
 /* --- How to Approach --- */
-.solver { --blue: #3b82f6; --green: #10b981; --violet: #8b5cf6; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 2.5rem; }
+.solver { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 2.5rem; }
 .solver-idea { padding: 0.9rem 1.25rem; font-size: 1.05rem; font-weight: 600; color: #0f172a; border-bottom: 1px solid var(--border-color); background: #f8fafc; }
-.solver-row { --accent: var(--blue); --tint: #dbeafe; display: grid; grid-template-columns: 8.5rem 1fr; border-bottom: 1px solid var(--border-color); }
-.solver-row-2 { --accent: var(--green); --tint: #d1fae5; }
-.solver-row-3 { --accent: var(--violet); --tint: #ede9fe; }
-.solver-label { background: var(--tint); padding: 0.75rem 1rem; font-weight: 700; color: #0f172a; display: flex; flex-direction: column; justify-content: center; }
+.solver-row { --accent: var(--theme-hover); --tint: color-mix(in srgb, var(--theme-color) 14%, white); display: grid; grid-template-columns: 8.5rem 1fr; border-bottom: 1px solid var(--border-color); }
+.solver-label { background: color-mix(in srgb, var(--theme-color) 6%, white); padding: 0.75rem 1rem; font-weight: 700; color: #0f172a; display: flex; flex-direction: column; justify-content: center; }
 .solver-label span { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
 .solver-body { padding: 0.75rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; min-width: 0; }
 .solver-prompt { font-size: 0.8rem; font-weight: 600; color: var(--accent); }
