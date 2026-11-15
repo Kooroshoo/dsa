@@ -65,7 +65,7 @@ plugins:
 - Indices / values | Find them in one pass
 - Array of arrays | Build each combination step by step | <span class="pattern-link" data-algo="Backtracking">Backtracking</span>
 
-### Brute force :: What would you check?
+### Brute force :: What to check?
 
 **Check**
 
@@ -107,12 +107,12 @@ plugins:
 - **Brute force:** Pairs
 - **Plan:** <span class="pattern-link" data-algo="HashMap & HashSet">HashMap & HashSet</span> › <span class="pattern-link" data-algo="Frequency">Frequency</span> → key = sorted word, group in a map · O(n·k log k)
 
-#### HashMap · Top K Frequent Elements
+#### Heap · Top K Frequent Elements
 
 - **Limits:** Large · Linear
 - **Shape:** Array / string → Indices / values
 - **Brute force:** Top k
-- **Plan:** <span class="pattern-link" data-algo="HashMap & HashSet">HashMap & HashSet</span> › <span class="pattern-link" data-algo="Frequency">Frequency</span> → count in a map, keep the top k in a heap · O(n log k)
+- **Plan:** <span class="pattern-link" data-algo="Heap & Priority Queue">Heap & Priority Queue</span> › <span class="pattern-link" data-algo="Top K">Top K</span> → count in a hash map, keep the top k in a heap · O(n log k)
 
 #### Linked Lists · Reverse Linked List
 
@@ -441,7 +441,7 @@ plugins:
 - **Limits:** Large · Constant
 - **Shape:** Array / string → Indices / values
 - **Brute force:** Subarrays
-- **Plan:** <span class="pattern-link" data-algo="Dynamic Programming">Dynamic Programming</span> › <span class="pattern-link" data-algo="1D DP">1D DP</span> → extend the current sum or restart at this item · O(n)
+- **Plan:** <span class="pattern-link" data-algo="Sliding Window">Sliding Window</span> or <span class="pattern-link" data-algo="Dynamic Programming">Dynamic Programming</span> › <span class="pattern-link" data-algo="1D DP">1D DP</span> → negative numbers break a window, so use DP: extend the sum or restart at each item · O(n)
 
 #### DP · Coin Change
 
