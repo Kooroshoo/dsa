@@ -210,6 +210,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // "Small (n ≤ 20)" -> "Small" plus a quieter "n ≤ 20" note (needs a space before the bracket, so "O(1)" stays whole)
     const chipLabel = label => label.replace(/\s+\(((?:[^()]|\([^()]*\))*)\)\s*$/, ' <span class="chip-note">$1</span>');
 
+    // How much each pick counts in the plan, keyed by chip or row label (a chip key wins over its row).
+    // The brute force and the input carry most weight; limits and output tip the balance. A tree input
+    // outweighs the brute force: tree problems stay tree problems (e.g. Kth Smallest in a BST).
+    const SOLVER_WEIGHTS = { size: 0.5, memory: 0.5, input: 2, output: 2, check: 4, tree: 5 };
+
     function updateSolver(s) {
         const votes = {};      // algorithm -> score from the ticked chips
         let fix = '';          // the last step's "what to do next" line
@@ -221,7 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const picked = [];
             row.querySelectorAll('.solver-group').forEach(g => g.querySelectorAll('input').forEach(input => {
                 input.closest('.solver-chip').classList.toggle('on', input.checked);
-                if (input.checked) picked.push({ ...g.options[input.value], input });
+                if (input.checked) picked.push({ ...g.options[input.value], input, row: g.querySelector('.solver-group-label')?.textContent.trim().toLowerCase(),
+                    chip: input.closest('.solver-chip').firstChild.nextSibling?.textContent.trim().toLowerCase() });
             }));
             // Each step shows one short tip: the most recently ticked choice
             // (a placeholder keeps the line, so the card does not jump in height)
@@ -230,10 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
             row.querySelector('.solver-result').innerHTML = lead?.hint
                 ? `<span class="solver-arrow">\u2192</span><span class="solver-hint">${lead.hint}</span>`
                 : hasTips ? `<span class="solver-arrow">\u2192</span><span class="solver-hint-empty">Choose items</span>` : '';
-            // Each step 1 pick scores 0.5 (it has two rows), step 2 scores 2, step 3 scores 4, so the last step
-            // decides and earlier picks break ties. Within steps 2-3 the first listed pattern scores slightly more.
-            const stepNo = Number(row.className.match(/solver-row-(\d+)/)[1]), weight = stepNo === s.step ? 4 : stepNo === 1 ? 0.5 : stepNo;
+            const stepNo = Number(row.className.match(/solver-row-(\d+)/)[1]);
             picked.forEach(o => {
+                const weight = SOLVER_WEIGHTS[o.chip] ?? SOLVER_WEIGHTS[o.row] ?? 1;
                 if (stepNo === s.step && o.fix) fix = o.fix;
                 // A chip lists patterns; each one votes for the algorithm that owns it (once per chip)
                 const counted = new Set();
@@ -242,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (stepNo === s.step && algo !== p.dataset.algo) (named[algo] = named[algo] || []).push({ key: p.dataset.algo, label: p.textContent });
                     if (counted.has(algo)) return;
                     counted.add(algo);
-                    votes[algo] = (votes[algo] || 0) + weight - (stepNo === 1 ? 0 : i * 0.01);
+                    votes[algo] = (votes[algo] || 0) + weight - i * 0.01;
                 });
             });
         });
@@ -253,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const groups = Array.from(s.root.querySelectorAll('.solver-group'));
         const left = groups.filter(g => !g.querySelector('input:checked')).length, total = groups.length;
         const sorted = Object.entries(votes).sort((x, y) => y[1] - x[1]);
-        const ranked = left ? [] : sorted.filter(([, v]) => v > sorted[0][1] / 2).slice(0, 3);
+        const ranked = left ? [] : sorted.filter(([, v]) => v > sorted[0][1] / 2).slice(0, 2);
         const patternsOf = algo => (named[algo] || algoPatterns[algo] || [])
             .map(p => `<span class="pattern-link" data-algo="${p.key}">${p.label}</span>`).join('');
         const item = ([algo], i) => `<span class="solver-suggest${i === 0 ? ' best' : ''}">
