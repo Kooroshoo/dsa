@@ -73,15 +73,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = marked.parse(content);
-        let grid = null, cardBody = null, currentCardTitle = '';
+        let grid = null, cardBody = null, currentCardTitle = '', solver = null;
 
         Array.from(tempDiv.children).forEach(node => {
             if (node.tagName === 'H2') {
                 const cleanText = node.textContent.replace(/\{.*?\}/g, '').trim();
+                // "{.hidden}" sections hold analyzer data only; "{.solver}" is drawn as the interactive solver
+                const hidden = /\{\.hidden\}/.test(node.textContent);
+                const isSolver = /\{\.solver\}/.test(node.textContent);
                 DOM.main.append(
-                    Object.assign(document.createElement('h2'), { className: 'section-title', innerHTML: cleanText, id: toId(cleanText) }),
-                    grid = Object.assign(document.createElement('div'), { className: 'grid-container' })
+                    Object.assign(document.createElement('h2'), { className: 'section-title', innerHTML: cleanText, id: toId(cleanText), hidden }),
+                    grid = Object.assign(document.createElement('div'), { className: isSolver ? 'solver' : 'grid-container', hidden })
                 );
+                solver = isSolver ? { root: grid, step: 0, mode: null } : null;
+                cardBody = null;
+            } else if (solver) {
+                addToSolver(solver, node);
             } else if (node.tagName === 'H3') {
                 if (!grid) DOM.main.appendChild(grid = Object.assign(document.createElement('div'), { className: 'grid-container' }));
                 const cleanText = node.textContent.replace(/\{.*?\}/g, '').trim();
@@ -143,6 +150,118 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         if (typeof Prism !== 'undefined') Prism.highlightAll();
+    }
+
+    // --- "HOW TO APPROACH" (3-step tick guide) ---
+    // Markdown: "### Name :: question" steps; inside, each "**Label**" + "- option | hint | patterns" list is a row of pick-one chips.
+    // Each step shows ONE tip. In the plan, later steps weigh more: the last step decides, earlier ones break ties.
+    // "### Examples" + "#### Title" + list makes expandable worked examples.
+    let solverGroupId = 0;
+    function addToSolver(s, node) {
+        if (!s.plan) {
+            s.plan = Object.assign(document.createElement('div'), { className: 'solver-plan' });
+            s.root.appendChild(s.plan);
+        }
+        if (node.tagName === 'P' && !s.step) {
+            s.root.insertBefore(Object.assign(document.createElement('div'), { className: 'solver-idea', innerHTML: node.innerHTML }), s.plan);
+        } else if (node.tagName === 'P' && s.mode !== 'examples') {
+            s.label = node.textContent.trim();
+        } else if (node.tagName === 'H3') {
+            const [name, prompt] = node.textContent.split('::').map(t => t.trim());
+            s.label = '';
+            if (name.toLowerCase() === 'examples') {
+                s.mode = 'examples';
+                s.examples = Object.assign(document.createElement('details'), { className: 'solver-examples', innerHTML: '<summary class="solver-examples-title">Examples</summary>' });
+                s.root.appendChild(s.examples);
+                return;
+            }
+            s.step++;
+            s.mode = 'one';
+            s.row = Object.assign(document.createElement('div'), { className: `solver-row solver-row-${s.step}` });
+            s.row.innerHTML = `<div class="solver-label"><span>Step ${s.step}</span>${name}</div>
+                <div class="solver-body"><div class="solver-prompt">${prompt || ''}</div><div class="solver-groups"></div><div class="solver-result"></div></div>`;
+            s.row.addEventListener('change', e => { s.row.last = e.target; updateSolver(s); });
+            s.root.insertBefore(s.row, s.plan);
+        } else if (node.tagName === 'H4' && s.mode === 'examples') {
+            const ex = Object.assign(document.createElement('details'), { className: 'solver-example' });
+            ex.innerHTML = `<summary>${node.innerHTML}</summary>`;
+            s.examples.appendChild(ex);
+            s.example = ex;
+        } else if (node.tagName === 'UL') {
+            if (s.mode === 'examples') return s.example?.appendChild(node);
+            const group = Object.assign(document.createElement('div'), { className: 'solver-group' });
+            group.options = Array.from(node.children).map(li => {
+                const [label, hint = '', pills = '', fix = ''] = li.innerHTML.split(/\s*\|\s*/);
+                return { label, hint, pills, fix };
+            });
+            // Each group is pick-one; clicking a ticked chip again un-ticks it
+            const name = 'solver-' + (++solverGroupId);
+            group.innerHTML = (s.label ? `<span class="solver-group-label">${s.label}</span>` : '') + '<div class="solver-chips">' +
+                group.options.map((o, i) => `<label class="solver-chip"><input type="radio" name="${name}" value="${i}">${chipLabel(o.label)}</label>`).join('') + '</div>';
+            group.querySelectorAll('input').forEach(r => r.addEventListener('click', () => {
+                if (r.dataset.was === '1') { r.checked = false; r.dispatchEvent(new Event('change', { bubbles: true })); }
+                group.querySelectorAll('input').forEach(x => x.dataset.was = x.checked ? '1' : '');
+            }));
+            s.row.querySelector('.solver-groups').appendChild(group);
+            updateSolver(s);
+        }
+    }
+
+    // "Small (n ≤ 20)" -> "Small" plus a quieter "n ≤ 20" note (needs a space before the bracket, so "O(1)" stays whole)
+    const chipLabel = label => label.replace(/\s+\(((?:[^()]|\([^()]*\))*)\)\s*$/, ' <span class="chip-note">$1</span>');
+
+    function updateSolver(s) {
+        const votes = {};      // algorithm -> score from the ticked chips
+        let fix = '';          // the last step's "what to do next" line
+        const named = {};      // algorithm -> patterns the last step's pick points to
+        const patternOwner = key => Object.keys(algoPatterns).find(a => algoPatterns[a].some(p => p.key === key));
+        const pillsOf = html => { const t = document.createElement('div'); t.innerHTML = html; return Array.from(t.querySelectorAll('.pattern-link')); };
+
+        s.root.querySelectorAll('.solver-row').forEach(row => {
+            const picked = [];
+            row.querySelectorAll('.solver-group').forEach(g => g.querySelectorAll('input').forEach(input => {
+                input.closest('.solver-chip').classList.toggle('on', input.checked);
+                if (input.checked) picked.push({ ...g.options[input.value], input });
+            }));
+            // Each step shows one short tip: the most recently ticked choice
+            // (a placeholder keeps the line, so the card does not jump in height)
+            const lead = picked.find(o => o.input === row.last) || picked[picked.length - 1];
+            const hasTips = Array.from(row.querySelectorAll('.solver-group')).some(g => g.options.some(o => o.hint));
+            row.querySelector('.solver-result').innerHTML = lead?.hint
+                ? `<span class="solver-arrow">\u2192</span><span class="solver-hint">${lead.hint}</span>`
+                : hasTips ? `<span class="solver-arrow">\u2192</span><span class="solver-hint-empty">Choose items</span>` : '';
+            // Each step 1 pick scores 0.5 (it has two rows), step 2 scores 2, step 3 scores 4, so the last step
+            // decides and earlier picks break ties. Within steps 2-3 the first listed pattern scores slightly more.
+            const stepNo = Number(row.className.match(/solver-row-(\d+)/)[1]), weight = stepNo === s.step ? 4 : stepNo === 1 ? 0.5 : stepNo;
+            picked.forEach(o => {
+                if (stepNo === s.step && o.fix) fix = o.fix;
+                // A chip lists patterns; each one votes for the algorithm that owns it (once per chip)
+                const counted = new Set();
+                pillsOf(o.pills).forEach((p, i) => {
+                    const algo = patternOwner(p.dataset.algo) || p.dataset.algo;
+                    if (stepNo === s.step && algo !== p.dataset.algo) (named[algo] = named[algo] || []).push({ key: p.dataset.algo, label: p.textContent });
+                    if (counted.has(algo)) return;
+                    counted.add(algo);
+                    votes[algo] = (votes[algo] || 0) + weight - (stepNo === 1 ? 0 : i * 0.01);
+                });
+            });
+        });
+
+        // Plan: shown once every row has a pick. The top algorithm is the suggestion; others scoring
+        // more than half of it are alternatives. The top suggestion also lists its possible patterns: the ones
+        // the last step's pick points to, or else all of the algorithm's patterns.
+        const groups = Array.from(s.root.querySelectorAll('.solver-group'));
+        const left = groups.filter(g => !g.querySelector('input:checked')).length, total = groups.length;
+        const sorted = Object.entries(votes).sort((x, y) => y[1] - x[1]);
+        const ranked = left ? [] : sorted.filter(([, v]) => v > sorted[0][1] / 2).slice(0, 3);
+        const patternsOf = algo => (named[algo] || algoPatterns[algo] || [])
+            .map(p => `<span class="pattern-link" data-algo="${p.key}">${p.label}</span>`).join('');
+        const item = ([algo], i) => `<span class="solver-suggest${i === 0 ? ' best' : ''}">
+            <span class="pattern-link" data-algo="${algo}">${algo}</span>${i === 0 && patternsOf(algo) ? `<span class="solver-sep">\u203a</span><span class="solver-patterns">${patternsOf(algo)}</span>` : ''}</span>`;
+        s.plan.innerHTML = `<span class="solver-plan-label">Your plan</span>` + (ranked.length
+            ? item(ranked[0], 0) + (ranked.length > 1 ? `<span class="solver-or">or</span>` + ranked.slice(1).map((r, i) => item(r, i + 1)).join('') : '')
+                + (fix ? `<div class="solver-next"><span class="solver-next-label">Next</span>${fix}</div>` : '')
+            : `<span class="solver-plan-empty">Pick one in each row to see your plan${left < total ? ` (${left} left)` : ''}.</span>`);
     }
 
     function buildDictionaries() {
