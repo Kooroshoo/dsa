@@ -6,6 +6,7 @@ Add a row to teach it a new problem. **Pattern** must be one of the pattern name
 | # | Problem | Algorithm | Pattern |
 | :--- | :--- | :--- | :--- |
 | 1 | Two Sum | HashMap & HashSet | Complement |
+| 560 | Subarray Sum Equals K | HashMap & HashSet | Complement |
 | 36 | Valid Sudoku | HashMap & HashSet | Seen |
 | 49 | Group Anagrams | HashMap & HashSet | Frequency |
 | 128 | Longest Consecutive Sequence | HashMap & HashSet | Seen |
