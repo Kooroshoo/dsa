@@ -20,7 +20,7 @@ plugins:
 
 | Algorithm | Best For | Patterns | | | |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **HashMap & HashSet** | Fast lookup and membership checks | <span class="pattern-link" data-algo="Complement">Complement</span><span class="pattern-problems"><a href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener">#1</a> <a href="https://leetcode.com/problems/subarray-sum-equals-k/" target="_blank" rel="noopener">#560</a></span> | <span class="pattern-link" data-algo="Seen">Seen</span><span class="pattern-problems"><a href="https://leetcode.com/problems/contains-duplicate/" target="_blank" rel="noopener">#217</a> <a href="https://leetcode.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener">#128</a></span> | <span class="pattern-link" data-algo="Frequency">Frequency</span><span class="pattern-problems"><a href="https://leetcode.com/problems/valid-anagram/" target="_blank" rel="noopener">#242</a> <a href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener">#49</a> <a href="https://leetcode.com/problems/top-k-frequent-elements/" target="_blank" rel="noopener">#347</a></span> |  |
+| **HashMap & HashSet** | Fast lookup and membership checks | <span class="pattern-link" data-algo="Seen">Seen</span><span class="pattern-problems"><a href="https://leetcode.com/problems/contains-duplicate/" target="_blank" rel="noopener">#217</a> <a href="https://leetcode.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener">#128</a></span> | <span class="pattern-link" data-algo="Frequency">Frequency</span><span class="pattern-problems"><a href="https://leetcode.com/problems/valid-anagram/" target="_blank" rel="noopener">#242</a> <a href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener">#49</a> <a href="https://leetcode.com/problems/top-k-frequent-elements/" target="_blank" rel="noopener">#347</a></span> | <span class="pattern-link" data-algo="Complement">Complement</span><span class="pattern-problems"><a href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener">#1</a> <a href="https://leetcode.com/problems/subarray-sum-equals-k/" target="_blank" rel="noopener">#560</a></span> |  |
 | **Linked Lists** | Node traversal, cycles, reversal | <span class="pattern-link" data-algo="Linked List Reversal">Reversal</span><span class="pattern-problems"><a href="https://leetcode.com/problems/reverse-linked-list/" target="_blank" rel="noopener">#206</a></span> | <span class="pattern-link" data-algo="Merge Sorted Lists">Merge</span><span class="pattern-problems"><a href="https://leetcode.com/problems/merge-two-sorted-lists/" target="_blank" rel="noopener">#21</a></span> | <span class="pattern-link" data-algo="Fast & Slow Pointers">Fast & Slow</span><span class="pattern-problems"><a href="https://leetcode.com/problems/middle-of-the-linked-list/" target="_blank" rel="noopener">#876</a> <a href="https://leetcode.com/problems/linked-list-cycle/" target="_blank" rel="noopener">#141</a> <a href="https://leetcode.com/problems/remove-nth-node-from-end-of-list/" target="_blank" rel="noopener">#19</a></span> |  |
 | **Stack and Queue** | Valid parentheses, undo operations, parsing nested structures | <span class="pattern-link" data-algo="Matching Brackets">Matching Brackets</span><span class="pattern-problems"><a href="https://leetcode.com/problems/valid-parentheses/" target="_blank" rel="noopener">#20</a></span> | <span class="pattern-link" data-algo="Monotonic Stack">Monotonic Stack</span><span class="pattern-problems"><a href="https://leetcode.com/problems/next-greater-element-i/" target="_blank" rel="noopener">#496</a> <a href="https://leetcode.com/problems/daily-temperatures/" target="_blank" rel="noopener">#739</a></span> | <span class="pattern-link" data-algo="Expression Evaluation">Expression Evaluation</span><span class="pattern-problems"><a href="https://leetcode.com/problems/evaluate-reverse-polish-notation/" target="_blank" rel="noopener">#150</a></span> |  |
 | **Two Pointers** | Sorted arrays, palindromes, pair sums | <span class="pattern-link" data-algo="Opposite Ends">Opposite Ends</span><span class="pattern-problems"><a href="https://leetcode.com/problems/valid-palindrome/" target="_blank" rel="noopener">#125</a> <a href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/" target="_blank" rel="noopener">#167</a> <a href="https://leetcode.com/problems/container-with-most-water/" target="_blank" rel="noopener">#11</a> <a href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener">#15</a></span> | <span class="pattern-link" data-algo="Same Direction">Same Direction</span><span class="pattern-problems"><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array/" target="_blank" rel="noopener">#26</a> <a href="https://leetcode.com/problems/move-zeroes/" target="_blank" rel="noopener">#283</a></span> |  |  |
@@ -76,20 +76,6 @@ plugins:
 
 ### Examples
 
-#### HashMap · Two Sum
-
-- **Data:** Array / string
-- **Limits:** Large · Linear
-- **Brute force:** Pairs
-- **Plan:** <span class="pattern-link" data-algo="HashMap & HashSet">HashMap & HashSet</span> › <span class="pattern-link" data-algo="Complement">Complement</span> → store each number, look up target − x · O(n)
-
-#### HashMap · Subarray Sum Equals K
-
-- **Data:** Array / string
-- **Limits:** Large · Linear
-- **Brute force:** Pairs
-- **Plan:** <span class="pattern-link" data-algo="HashMap & HashSet">HashMap & HashSet</span> › <span class="pattern-link" data-algo="Complement">Complement</span> → running sum; count earlier sums equal to sum − k · O(n)
-
 #### HashMap · Contains Duplicate
 
 - **Data:** Array / string
@@ -117,6 +103,20 @@ plugins:
 - **Limits:** Large · Linear
 - **Brute force:** Pairs
 - **Plan:** <span class="pattern-link" data-algo="HashMap & HashSet">HashMap & HashSet</span> › <span class="pattern-link" data-algo="Frequency">Frequency</span> → key = sorted word, group in a map · O(n·k log k)
+
+#### HashMap · Two Sum
+
+- **Data:** Array / string
+- **Limits:** Large · Linear
+- **Brute force:** Pairs
+- **Plan:** <span class="pattern-link" data-algo="HashMap & HashSet">HashMap & HashSet</span> › <span class="pattern-link" data-algo="Complement">Complement</span> → store each number, look up target − x · O(n)
+
+#### HashMap · Subarray Sum Equals K
+
+- **Data:** Array / string
+- **Limits:** Large · Linear
+- **Brute force:** Pairs
+- **Plan:** <span class="pattern-link" data-algo="HashMap & HashSet">HashMap & HashSet</span> › <span class="pattern-link" data-algo="Complement">Complement</span> → running sum; count earlier sums equal to sum − k · O(n)
 
 #### Heap · Top K Frequent Elements
 
