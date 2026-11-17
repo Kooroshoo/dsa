@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (given === 'Linked list') return p('Linked Lists', ['Fast & Slow Pointers'], 'walk two pointers along the lists', 'O(n)', 'O(1)');
                 if (given === 'Sorted array' || inPlace)
                     return p('Two Pointers', ['Opposite Ends', 'Same Direction'], (given === 'Sorted array' ? 'sorted' : 'no extra memory') + ' → walk two pointers', 'O(n)', 'O(1)');
-                return p('HashMap & HashSet', ['Complement', 'Seen', 'Frequency'], 'not sorted, extra memory OK → store what you have seen', 'O(n)', 'O(n)');
+                return p('HashMap & HashSet', ['Seen', 'Frequency', 'Complement'], 'not sorted, extra memory OK → store what you have seen', 'O(n)', 'O(n)');
             case 'Subarrays': return p('Sliding Window', ['Variable Window', 'Fixed Window'], 'slide one window instead', 'O(n)', 'O(k)');
             case 'Best sum': return p('Dynamic Programming', ['1D DP'], 'extend the sum or restart at each item', 'O(n)', 'O(1)');
             case 'Subsets': return p('Backtracking', ['Subsets', 'Permutations', 'Combinations'], 'you must list them all → choose, explore, undo', 'O(2ⁿ)', 'O(n)');
