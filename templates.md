@@ -235,20 +235,21 @@ for value in hashset:                   # iterate
 
 ## Complement
 
-**Best for:** Finding a pair that adds up to a target.
+**Best for:** Finding a pair, or a subarray, that adds up to a target.
 
 **Time:** $O(n)$ · **Space:** $O(n)$
 
 **Look for:** "pair of indices", "indices i and j", "indices of the two numbers", "sum equals", "equals k"
 
 ```python
-seen = {}                               # value -> index
+seen = {}                               # key -> index or count
 
-for i, num in enumerate(nums):
-    complement = target - num
+for x in arr:
+    key = ...
+    complement = target - key
     if complement in seen:
-        return [seen[complement], i]
-    seen[num] = i
+        ...                             # complement found
+    seen[key] = ...
 ```
 
 ## Seen
@@ -262,27 +263,35 @@ for i, num in enumerate(nums):
 ```python
 seen = set()
 
-for num in nums:
-    if num in seen:
-        return True                     # duplicate found
-    seen.add(num)
-
-return False
+for x in arr:
+    if x in seen:
+        ...                             # x appeared before
+    seen.add(x)
 ```
 
 ## Frequency
 
-**Best for:** Counting occurrences, comparing counts, or grouping.
+**Best for:** Counting how many of each item, or grouping items that share a key.
 
 **Time:** $O(n)$ · **Space:** $O(k)$ (k = distinct values)
 
 **Look for:** "anagram", "frequency", "most frequent", "group", "non-repeating", "count", "letters", "used once", "characters"
 
 ```python
-count = {}
+count = {}                              # key -> count
 
 for x in arr:
     count[x] = count.get(x, 0) + 1
+```
+
+```python
+groups = {}                             # key -> items
+
+for x in arr:
+    key = ...                           # what the items share
+    if key not in groups:
+        groups[key] = []
+    groups[key].append(x)
 ```
 
 ## Binary Search
