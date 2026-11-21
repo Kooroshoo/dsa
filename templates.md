@@ -282,7 +282,7 @@ return False
 count = {}
 
 for x in arr:
-    count[x] = count.get(x, 0) + 1      # or: count = Counter(arr)
+    count[x] = count.get(x, 0) + 1
 ```
 
 ## Binary Search
