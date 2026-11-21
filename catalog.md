@@ -35,9 +35,9 @@ Add a row to teach it a new problem. **Pattern** must be one of the pattern name
 | 20 | Valid Parentheses | Stack and Queue | Matching Brackets |
 | 22 | Generate Parentheses | Stack and Queue |  |
 | 84 | Largest Rectangle in Histogram | Stack and Queue | Monotonic Stack |
-| 150 | Evaluate Reverse Polish Notation | Stack and Queue | Expression Evaluation |
+| 150 | Evaluate Reverse Polish Notation | Stack and Queue | Matching Brackets |
 | 155 | Min Stack | Stack and Queue |  |
-| 224 | Basic Calculator | Stack and Queue | Expression Evaluation |
+| 224 | Basic Calculator | Stack and Queue | Matching Brackets |
 | 739 | Daily Temperatures | Stack and Queue | Monotonic Stack |
 | 853 | Car Fleet | Stack and Queue | Monotonic Stack |
 | 11 | Container With Most Water | Two Pointers | Opposite Ends |
@@ -161,7 +161,7 @@ Add a row to teach it a new problem. **Pattern** must be one of the pattern name
 | 8 | String to Integer (atoi) | Math & Geometry | Digit Manipulation |
 | 43 | Multiply Strings | Math & Geometry | Digit Manipulation |
 | 48 | Rotate Image | Math & Geometry | Matrix Traversal |
-| 50 | Pow(x, n) | Math & Geometry | Fast Power |
+| 50 | Pow(x, n) | Math & Geometry | Digit Manipulation |
 | 54 | Spiral Matrix | Math & Geometry | Matrix Traversal |
 | 66 | Plus One | Math & Geometry | Digit Manipulation |
 | 67 | Add Binary | Math & Geometry | Digit Manipulation |
@@ -178,3 +178,6 @@ Add a row to teach it a new problem. **Pattern** must be one of the pattern name
 | 208 | Implement Trie (Prefix Tree) | Trie (Prefix Tree) |  |
 | 211 | Design Add and Search Words Data Structure | Trie (Prefix Tree) |  |
 | 212 | Word Search II | Trie (Prefix Tree) |  |
+| 1091 | Shortest Path in Binary Matrix | Graphs | Dijkstra's Algorithm |
+| 1232 | Check If It Is a Straight Line | Math & Geometry | Vectors |
+| 593 | Valid Square | Math & Geometry | Vectors |

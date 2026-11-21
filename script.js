@@ -107,8 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const rows = Array.from(node.querySelectorAll('tbody tr'));
                     const isAlgorithmsTable = currentCardTitle === 'Algorithms';
-                    // The 6 highest-priority algorithms stay visible regardless of their row position
-                    const coreAlgorithms = ['HashMap & HashSet', 'Binary Search', 'Trees', 'Graphs', 'Dynamic Programming', 'Heap & Priority Queue'];
                     rows.forEach(row => {
                         const cell = row.querySelector('td:first-child');
                         const targetEl = cell.querySelector('strong') || cell;
@@ -127,23 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 });
                             });
                         }
-
-                        if (isAlgorithmsTable && !coreAlgorithms.includes(algoName)) row.classList.add('extra-algo-row');
                     });
                     wrap.appendChild(node);
                     cardBody.appendChild(wrap);
-
-                    if (isAlgorithmsTable && rows.some(r => r.classList.contains('extra-algo-row'))) {
-                        const toggleBtn = Object.assign(document.createElement('button'), {
-                            className: 'secondary-btn show-all-btn',
-                            textContent: 'Show All'
-                        });
-                        toggleBtn.addEventListener('click', () => {
-                            const expanded = wrap.classList.toggle('expanded');
-                            toggleBtn.textContent = expanded ? 'Show Less' : 'Show All';
-                        });
-                        cardBody.appendChild(toggleBtn);
-                    }
                 } else {
                     cardBody.appendChild(node);
                 }
@@ -244,8 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (given === 'Tree') return p('Trees', ['Binary Search Tree'], 'a BST is already sorted → walk it in order', 'O(h + k)', 'O(h)');
                 if (given === 'Linked list') return p('Heap & Priority Queue', ['K-Way Merge'], 'keep the list heads in a heap', 'O(n log k)', 'O(k)');
                 return p('Heap & Priority Queue', ['Top K', 'Two Heaps', 'K-Way Merge'], 'keep only the best k in a heap', 'O(n log k)', 'O(k)');
-            case 'Matching': return p('Stack and Queue', ['Matching Brackets', 'Expression Evaluation', 'Monotonic Stack'], 'keep waiting items on a stack', 'O(n)', 'O(n)');
-            case 'Math': return p('Math & Geometry', ['Digit Manipulation', 'Matrix Traversal', 'Fast Power'], 'use % 10, bit tricks or index math', 'O(log n) or O(n)', 'O(1)');
+            case 'Matching': return p('Stack and Queue', ['Matching Brackets', 'Monotonic Stack'], 'keep waiting items on a stack', 'O(n)', 'O(n)');
+            case 'Math': return p('Math & Geometry', ['Digit Manipulation', 'Matrix Traversal', 'Vectors'], 'use % 10, bit tricks, index math or vector maths', 'O(log n) or O(n)', 'O(1)');
         }
     }
 

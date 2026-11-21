@@ -795,11 +795,11 @@ def union(a, b):
 
 ## Dijkstra's Algorithm
 
-**Best for:** Shortest path in a graph with **weighted** (non-negative) edges.
+**Best for:** Shortest path with **weighted** (non-negative) edges, and A* path planning on a grid.
 
 **Time:** $O(E \log V)$ · **Space:** $O(V + E)$
 
-**Look for:** "weighted", "travel times", "shortest path", "minimum time", "cheapest", "minimum effort", "signal"
+**Look for:** "weighted", "travel times", "shortest path", "minimum time", "cheapest", "minimum effort", "signal", "path planning", "clear path"
 
 ```python
 graph = defaultdict(list)
@@ -818,6 +818,13 @@ while heap:
         if nd < dist.get(nei, float('inf')):
             dist[nei] = nd
             heapq.heappush(heap, (nd, nei))
+```
+
+**A\*:** the same loop, but order the heap by `distance + h(node)`, where `h` is a never-overestimating guess of the distance left (e.g. Manhattan distance to the goal on a grid). It explores toward the goal first.
+
+```python
+h = lambda r, c: abs(r - goal[0]) + abs(c - goal[1])
+heap = [(h(*start), 0, start)]          # (distance + guess, distance, cell)
 ```
 
 ## Structure Traversal (See Step 2)
@@ -925,7 +932,7 @@ return dummy.next
 
 ## Math & Geometry
 
-**Best for:** Digit manipulation, matrix operations, fast exponentiation.
+**Best for:** Digit manipulation, matrix operations, points and vectors.
 
 ```python
 n % 10                                  # last digit
@@ -947,7 +954,7 @@ int(a / b)                              # divide, truncate toward zero
 
 **Time:** $O(\log n)$ · **Space:** $O(1)$ (one step per digit)
 
-**Look for:** "digit", "reverse", "palindrome", "32-bit"
+**Look for:** "digit", "reverse", "palindrome", "32-bit", "power", "pow", "exponent"
 
 ```python
 res = 0
@@ -977,6 +984,26 @@ for i in range(n):
 for row in matrix:
     row.reverse()
 ```
+
+## Vectors
+
+**Best for:** Points and directions: collinearity, distances, areas, squares and rectangles.
+
+**Time:** $O(1)$ per check · **Space:** $O(1)$
+
+**Look for:** "points", "coordinates", "straight line", "square", "rectangle", "triangle", "distance", "angle"
+
+```python
+def cross(o, a, b):                     # > 0: left turn, < 0: right turn, 0: collinear
+    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+def dist2(a, b):                        # squared distance: no sqrt, no float errors
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
+
+area = abs(cross(a, b, c)) / 2          # triangle area
+```
+
+**Tip:** compare squared distances and use cross products instead of slopes, so you never divide by zero.
 
 ## Fast Power
 
@@ -1078,7 +1105,7 @@ not queue                               # is empty
 
 **Time:** $O(n)$ · **Space:** $O(n)$
 
-**Look for:** "parentheses", "brackets", "well-formed"
+**Look for:** "parentheses", "brackets", "well-formed", "expression", "evaluate", "calculator", "reverse polish notation"
 
 ```python
 pairs = {')': '(', ']': '[', '}': '{'}
